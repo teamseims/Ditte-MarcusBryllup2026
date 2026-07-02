@@ -13,6 +13,7 @@ import { MilestoneLayer } from './components/MilestoneLayer';
 import { GalleryModal } from './components/GalleryModal';
 import { StitchedNames } from './components/StitchedText';
 import { FinaleParticles } from './components/FinaleParticles';
+import { KioskController } from './kiosk/KioskController';
 import './styles/threads.css';
 import './styles/milestones.css';
 import './styles/gallery.css';
@@ -122,6 +123,7 @@ export default function App() {
 
   return (
     <div className="page">
+      {KIOSK && <KioskController reducedMotion={reducedMotion} />}
       {hasPlaceholderContent(content) && (
         <div className="placeholder-ribbon" role="note">
           {strings.placeholderRibbon}

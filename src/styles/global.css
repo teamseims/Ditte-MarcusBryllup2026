@@ -132,6 +132,23 @@ img {
   color: var(--gilt-deep);
 }
 
+/* ── kiosk mode (§10) ── */
+html.kiosk,
+html.kiosk * {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+html.kiosk {
+  overscroll-behavior: none;
+}
+
+html.kiosk.cursor-hidden,
+html.kiosk.cursor-hidden * {
+  cursor: none;
+}
+
 /* Utility: visually hidden but readable by screen readers */
 .visually-hidden {
   position: absolute;
