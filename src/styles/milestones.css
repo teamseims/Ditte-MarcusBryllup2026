@@ -1,0 +1,215 @@
+/* Markers, cards, near-miss labels (§7–8). */
+
+.milestone-layer {
+  position: absolute;
+  inset: 0;
+}
+
+/* ── markers: embroidered emblems on the thread ── */
+.marker {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px; /* center on anchor */
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  transform: scale(var(--kiosk-scale));
+}
+
+.marker-emblem {
+  width: 56px;
+  height: 56px;
+  display: block;
+}
+
+@media (max-width: 719px) {
+  .marker-emblem {
+    width: 46px;
+    height: 46px;
+  }
+}
+
+.marker-wedding {
+  width: 104px;
+  height: 104px;
+  margin: -52px 0 0 -52px;
+}
+
+.marker-wedding .marker-emblem {
+  width: 96px;
+  height: 96px;
+}
+
+.marker-emblem circle,
+.marker-emblem path {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.marker-emblem .disc {
+  fill: var(--flax);
+  fill-opacity: 0.94;
+  stroke: none;
+}
+
+.marker-her {
+  color: var(--madder);
+}
+.marker-her .ring {
+  stroke: var(--madder);
+  stroke-dasharray: 3 5;
+}
+
+.marker-him {
+  color: var(--woad);
+}
+.marker-him .ring {
+  stroke: var(--woad);
+  stroke-dasharray: 3 5;
+}
+
+.marker-shared {
+  color: var(--gilt);
+}
+.marker-meeting {
+  color: var(--gilt);
+}
+.marker-emblem .ring-her {
+  stroke: var(--madder);
+  stroke-dasharray: 3 5;
+}
+.marker-emblem .ring-him {
+  stroke: var(--woad);
+  stroke-dasharray: 3 5;
+}
+
+.marker-wedding {
+  color: var(--gilt-deep);
+}
+.marker-wedding .ring-gilt {
+  stroke: var(--gilt);
+  stroke-width: 2.5;
+  stroke-dasharray: 2 6;
+}
+.marker-wedding .ring-inner {
+  stroke: var(--gilt-deep);
+  stroke-width: 1;
+  opacity: 0.55;
+}
+
+/* ghost → inked (§6.2): faint ghost-stitch until the needle passes */
+.marker,
+.card,
+.nearmiss-label,
+.wedding-cue {
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+.marker.is-ghost {
+  opacity: 0.35;
+  transform: scale(calc(var(--kiosk-scale) * 0.85));
+}
+.marker.is-inked {
+  opacity: 1;
+}
+
+.card.is-ghost,
+.nearmiss-label.is-ghost,
+.wedding-cue.is-ghost {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.card.is-inked,
+.nearmiss-label.is-inked,
+.wedding-cue.is-inked {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.12s; /* card fades up just after the marker inks in */
+}
+
+/* deep-link pulse (§8) */
+@keyframes marker-pulse {
+  0%,
+  100% {
+    filter: none;
+  }
+  30% {
+    filter: drop-shadow(0 0 14px var(--gilt));
+  }
+}
+.marker.is-pulsing {
+  animation: marker-pulse 1.6s ease 2;
+}
+
+/* ── cards: quiet ink on fabric, hairline gilt top rule (§8) ── */
+.card {
+  position: absolute;
+  padding: 14px 4px 6px;
+  border-top: 1px solid var(--gilt);
+  cursor: pointer;
+}
+
+.card-left {
+  text-align: right;
+}
+
+.card-title {
+  font-size: var(--size-title);
+  font-weight: 520;
+  margin: 6px 0 4px;
+  color: var(--ink);
+}
+
+.card-text {
+  font-size: var(--size-body);
+  line-height: var(--leading-body);
+  color: var(--ink-soft);
+}
+
+.card-date {
+  opacity: 0.85;
+}
+
+.card-more {
+  margin-top: 10px;
+  color: var(--gilt-deep);
+  opacity: 0.75;
+}
+
+.card:hover .card-more,
+.card:focus-visible .card-more {
+  opacity: 1;
+}
+
+/* ── near-miss whisper (§5.2) ── */
+.nearmiss-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--ink-faint);
+  text-align: center;
+  width: max-content;
+  max-width: 240px;
+  pointer-events: none;
+}
+.nearmiss-label.is-ghost {
+  opacity: 0;
+  transform: translate(-50%, -40%);
+}
+.nearmiss-label.is-inked {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.wedding-cue {
+  position: absolute;
+  transform: translateX(-50%);
+  cursor: pointer;
+  pointer-events: none;
+}

@@ -7,7 +7,9 @@ import { configFor } from './lib/geometry/config';
 import { useViewport } from './lib/useViewport';
 import { Sprig } from './components/Sprig';
 import { Tapestry } from './components/Tapestry';
+import { MilestoneLayer } from './components/MilestoneLayer';
 import './styles/threads.css';
+import './styles/milestones.css';
 
 /**
  * App shell. Routes:
@@ -21,6 +23,14 @@ export default function App() {
     () => buildTapestryGeometry(content, configFor(width)),
     [width],
   );
+
+  // Phase 3 static check: everything inked. Phase 4 hands this to the
+  // scroll engine (needle-pass activation).
+  const inkedIds = useMemo(() => {
+    const all = new Set(content.milestones.map((m) => m.id));
+    geometry.nearMisses.forEach((_, i) => all.add(`nearmiss-${i}`));
+    return all;
+  }, [geometry]);
 
   return (
     <div className="page">
@@ -54,6 +64,12 @@ export default function App() {
         style={{ height: geometry.layout.bodyHeight }}
       >
         <Tapestry geometry={geometry} />
+        <MilestoneLayer
+          geometry={geometry}
+          content={content}
+          inkedIds={inkedIds}
+          onOpen={(id) => console.log('open gallery:', id)}
+        />
       </main>
 
       <footer className="finale">
