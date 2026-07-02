@@ -192,11 +192,17 @@
   font-family: var(--font-body);
   font-style: italic;
   font-size: 0.92rem;
-  color: var(--ink-faint);
+  color: var(--ink-soft);
   text-align: center;
   width: max-content;
   max-width: 240px;
   pointer-events: none;
+  /* flax halo so the whisper stays readable where it crosses the threads */
+  text-shadow:
+    0 0 8px var(--flax),
+    0 0 5px var(--flax),
+    0 0 3px var(--flax),
+    0 0 2px var(--flax);
 }
 .nearmiss-label.is-ghost {
   opacity: 0;

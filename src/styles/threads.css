@@ -56,3 +56,58 @@
   fill: var(--flax);
   stroke: none;
 }
+
+/* ── needle tips (§6.1) ── */
+.needle {
+  transition: opacity 0.35s ease;
+}
+.needle line,
+.needle circle {
+  fill: none;
+  stroke-linecap: round;
+}
+.needle-shaft {
+  stroke: var(--gilt-deep);
+  stroke-width: 2.4;
+}
+.needle-eye {
+  stroke: var(--gilt-deep);
+  stroke-width: 1.5;
+}
+.needle-glint {
+  stroke: var(--gilt-light);
+  stroke-width: 1.2;
+}
+
+/* reduced motion: needles never appear (§13) */
+@media (prefers-reduced-motion: reduce) {
+  .needle {
+    display: none;
+  }
+}
+
+/* ── scroll progress stitch (§4): 2px gilt stitch line, right edge ── */
+.progress-stitch {
+  position: fixed;
+  top: 0;
+  right: 5px;
+  width: 2px;
+  height: 100vh;
+  z-index: 30;
+  pointer-events: none;
+}
+.progress-fill {
+  height: 100%;
+  background: repeating-linear-gradient(
+    180deg,
+    var(--gilt) 0 7px,
+    transparent 7px 12px
+  );
+  clip-path: inset(0 0 100% 0);
+  opacity: 0.8;
+}
+@media (prefers-reduced-motion: reduce) {
+  .progress-stitch {
+    display: none;
+  }
+}

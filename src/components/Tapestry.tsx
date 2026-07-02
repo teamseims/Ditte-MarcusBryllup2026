@@ -21,9 +21,11 @@ import { THREAD } from '../styles/tokens';
 
 interface TapestryProps {
   geometry: TapestryGeometry;
+  /** fiber wobble filter (§6 item 4) — kiosk only, ?fx=0/1 forces */
+  fiberFx?: boolean;
 }
 
-export function Tapestry({ geometry }: TapestryProps) {
+export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
   const { her, him, patches, medallion, cfg, layout } = geometry;
   const mobile = cfg.widthPx < 720;
   const w = {
@@ -65,6 +67,18 @@ export function Tapestry({ geometry }: TapestryProps) {
             height={layout.bodyHeight}
           />
         </clipPath>
+        {fiberFx && (
+          <filter id="fiber-wobble" x="-2%" y="-1%" width="104%" height="102%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.012 0.09"
+              numOctaves="1"
+              seed="7"
+              result="n"
+            />
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" />
+          </filter>
+        )}
       </defs>
 
       {/* ── base threads ── */}
@@ -74,7 +88,11 @@ export function Tapestry({ geometry }: TapestryProps) {
           ['him', him.polyline.totalLen],
         ] as const
       ).map(([key, len]) => (
-        <g key={key} className={`thread thread-${key}`}>
+        <g
+          key={key}
+          className={`thread thread-${key}`}
+          filter={fiberFx ? 'url(#fiber-wobble)' : undefined}
+        >
           <use
             href={`#thread-${key}`}
             className="t-shadow"
@@ -113,6 +131,7 @@ export function Tapestry({ geometry }: TapestryProps) {
               data-thread={p.over}
               data-layer="patch"
               data-start={p.startLen}
+              data-len={p.len}
               strokeWidth={gapW}
               strokeDasharray={p.len}
               pathLength={p.len}
@@ -123,6 +142,7 @@ export function Tapestry({ geometry }: TapestryProps) {
               data-thread={p.over}
               data-layer="patch"
               data-start={p.startLen}
+              data-len={p.len}
               transform={`translate(${off} ${off})`}
               strokeWidth={w.shadow}
               strokeDasharray={p.len}
@@ -134,6 +154,7 @@ export function Tapestry({ geometry }: TapestryProps) {
               data-thread={p.over}
               data-layer="patch"
               data-start={p.startLen}
+              data-len={p.len}
               strokeWidth={w.core}
               strokeDasharray={p.len}
               pathLength={p.len}
@@ -159,6 +180,17 @@ export function Tapestry({ geometry }: TapestryProps) {
         cy={medallion.y}
         r={medallion.r + 6}
       />
+
+      {/* ── needle tips (§6.1): they "sew" the tapestry as you scroll ──
+          Positioned per frame by the scroll engine; eye at the thread tip,
+          point leading ~24px ahead along the local tangent. */}
+      {(['her', 'him'] as const).map((key) => (
+        <g key={key} data-needle={key} className="needle" opacity="0">
+          <line className="needle-shaft" x1="0" y1="0" x2="24" y2="0" />
+          <circle className="needle-eye" cx="-1.5" cy="0" r="2.4" />
+          <line className="needle-glint" x1="16" y1="-1.6" x2="21" y2="-2.8" />
+        </g>
+      ))}
     </svg>
   );
 }

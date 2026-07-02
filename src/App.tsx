@@ -1,10 +1,12 @@
-import { useMemo } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { content } from './data/content';
 import { strings } from './data/strings';
 import { hasPlaceholderContent } from './lib/validateContent';
 import { buildTapestryGeometry } from './lib/geometry';
 import { configFor } from './lib/geometry/config';
 import { useViewport } from './lib/useViewport';
+import { useReducedMotion } from './lib/useReducedMotion';
+import { useScrollEngine } from './lib/scroll/useScrollEngine';
 import { Sprig } from './components/Sprig';
 import { Tapestry } from './components/Tapestry';
 import { MilestoneLayer } from './components/MilestoneLayer';
@@ -17,20 +19,34 @@ import './styles/milestones.css';
  *   /qr, ?qr=1   printable QR poster (added in a later phase)
  *   ?mode=kiosk  kiosk behaviors (added in a later phase)
  */
+
+const params = new URLSearchParams(window.location.search);
+const KIOSK = params.get('mode') === 'kiosk';
+const FX = params.get('fx');
+
 export default function App() {
   const { width } = useViewport();
+  const reducedMotion = useReducedMotion();
   const geometry = useMemo(
     () => buildTapestryGeometry(content, configFor(width)),
     [width],
   );
 
-  // Phase 3 static check: everything inked. Phase 4 hands this to the
-  // scroll engine (needle-pass activation).
-  const inkedIds = useMemo(() => {
-    const all = new Set(content.milestones.map((m) => m.id));
-    geometry.nearMisses.forEach((_, i) => all.add(`nearmiss-${i}`));
-    return all;
-  }, [geometry]);
+  // fiber wobble (§6 item 4): kiosk only by default; ?fx=1/0 forces
+  const fiberFx =
+    !reducedMotion && width >= 720 && (FX === '1' || (KIOSK && FX !== '0'));
+
+  const bodyRef = useRef<HTMLElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const [inkedIds, setInkedIds] = useState<ReadonlySet<string>>(new Set());
+
+  useScrollEngine({
+    geometry,
+    bodyRef,
+    progressRef,
+    reducedMotion,
+    onInked: setInkedIds,
+  });
 
   return (
     <div className="page">
@@ -60,10 +76,11 @@ export default function App() {
       </header>
 
       <main
+        ref={bodyRef}
         className="tapestry-body"
         style={{ height: geometry.layout.bodyHeight }}
       >
-        <Tapestry geometry={geometry} />
+        <Tapestry geometry={geometry} fiberFx={fiberFx} />
         <MilestoneLayer
           geometry={geometry}
           content={content}
@@ -80,6 +97,11 @@ export default function App() {
         <p className="chip">{content.weddingDate}</p>
         <p className="hero-line">{strings.closingLine}</p>
       </footer>
+
+      {/* scroll progress as a stitch line filling along the page edge (§4) */}
+      <div className="progress-stitch" aria-hidden="true">
+        <div ref={progressRef} className="progress-fill" />
+      </div>
 
       <div className="vignette" aria-hidden="true" />
     </div>
