@@ -1,0 +1,51 @@
+/*
+ * Design tokens (§2) — the ONLY place raw colors may appear.
+ * Simon: retheme the wedding here. The same values are mirrored for the SVG
+ * thread code in src/styles/tokens.ts — keep the two files in sync.
+ */
+
+:root {
+  /* ---- Palette: historical dye names, tapestry logic ---- */
+  --flax: #e7dcc3; /* fabric ground (linen) */
+  --flax-deep: #d9cbaa; /* weave shadow / vignette edge */
+  --madder: #a64d5f; /* HER thread (madder rose) */
+  --woad: #3d5a6c; /* HIS thread (woad indigo) */
+  --gilt: #b8892e; /* shared accents, stitched frame, finale */
+  --ink: #33261b; /* text (warm sepia ink) */
+
+  /* Derived thread variants: -deep = shadow stitch, -light = sheen stitch */
+  --madder-deep: #6c323e;
+  --madder-light: #c8828f;
+  --woad-deep: #283b47;
+  --woad-light: #6c8c9e;
+  --gilt-deep: #8a6620;
+  --gilt-light: #d4a94f;
+
+  /* Convenience mixes (still derived from the palette above) */
+  --ink-soft: rgba(51, 38, 27, 0.72);
+  --ink-faint: rgba(51, 38, 27, 0.4);
+  --weave-line: rgba(51, 38, 27, 0.04);
+
+  /* ---- Typography ---- */
+  --font-display: 'Fraunces', 'Fraunces-fallback', georgia, serif;
+  --font-body: 'Crimson Pro', 'CrimsonPro-fallback', georgia, serif;
+
+  --size-names: clamp(3rem, 8vw, 6.5rem);
+  --size-title: 1.6rem;
+  --size-body: 1.05rem;
+  --leading-body: 1.65;
+  --size-chip: 0.78rem;
+  --track-chip: 0.12em;
+
+  /* ---- Chrome ---- */
+  --frame-inset: 12px;
+  --kiosk-scale: 1;
+}
+
+/* Kiosk mode: slightly larger type and hit targets (§10) */
+html.kiosk {
+  --kiosk-scale: 1.15;
+  --size-title: 1.84rem;
+  --size-body: 1.2rem;
+  --size-chip: 0.9rem;
+}
