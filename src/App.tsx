@@ -46,9 +46,10 @@ function TapestryPage() {
     [width],
   );
 
-  // fiber wobble (§6 item 4): kiosk only by default; ?fx=1/0 forces
+  // fiber wobble (§6 item 4): on for kiosk and desktop, off on mobile;
+  // ?fx=1/0 forces either way
   const fiberFx =
-    !reducedMotion && width >= 720 && (FX === '1' || (KIOSK && FX !== '0'));
+    !reducedMotion && (FX === '1' || (width >= 720 && FX !== '0'));
 
   const bodyRef = useRef<HTMLElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -129,6 +130,10 @@ function TapestryPage() {
     ? content.milestones.find((m) => m.id === openId)
     : undefined;
 
+  // hem dangles sit exactly on the thread lanes (organic pass)
+  const laneHerX = (geometry.cfg.laneHer / 1000) * width;
+  const laneHimX = (geometry.cfg.laneHim / 1000) * width;
+
   return (
     <div className="page">
       {KIOSK && <KioskController reducedMotion={reducedMotion} />}
@@ -152,21 +157,30 @@ function TapestryPage() {
         <p className="hero-line">{content.heroLine}</p>
         <p className="chip">{content.weddingDate}</p>
 
-        {/* the top hem: loose thread-ends dangle from it (§4) */}
+        {/* The top hem: loose thread-ends dangle from it at the exact lane
+            positions where the story threads begin below the fold — the cue
+            and the tapestry read as the same thread passing through the
+            fabric (§4, organic pass). */}
         <div className="hero-hem" aria-hidden="true" />
-        <div className="hero-cue-wrap">
-          <svg
-            className="hero-threads"
-            width="110"
-            height="78"
-            viewBox="0 0 110 78"
-            aria-hidden="true"
-          >
-            <path className="dangle dangle-her" d="M40 2 C 37 26, 46 42, 39 66" />
-            <path className="dangle dangle-him" d="M70 2 C 74 24, 65 44, 72 62" />
-          </svg>
-          <p className="chip hero-cue">{strings.scrollCue}</p>
-        </div>
+        <svg
+          className="hero-threads"
+          width={width}
+          height="66"
+          viewBox={`0 0 ${width} 66`}
+          aria-hidden="true"
+        >
+          <path
+            className="dangle dangle-her"
+            style={{ transformOrigin: `${laneHerX}px 0px` }}
+            d={`M${laneHerX} 0 C ${laneHerX - 5} 22, ${laneHerX + 7} 42, ${laneHerX - 3} 62`}
+          />
+          <path
+            className="dangle dangle-him"
+            style={{ transformOrigin: `${laneHimX}px 0px` }}
+            d={`M${laneHimX} 0 C ${laneHimX + 6} 20, ${laneHimX - 6} 44, ${laneHimX + 4} 58`}
+          />
+        </svg>
+        <p className="chip hero-cue">{strings.scrollCue}</p>
       </header>
 
       <main

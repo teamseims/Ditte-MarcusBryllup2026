@@ -58,6 +58,10 @@ export interface TapestryGeometry {
   medallion: { x: number; y: number; r: number };
   braidCrossingYs: number[];
   amplitudeAt: (y: number) => number;
+  /** un-noised amplitude envelope (monotone after the bloom; for tests) */
+  baseAmplitudeAt: (y: number) => number;
+  /** the braid's wandering center axis */
+  centerAt: (y: number) => number;
 }
 
 /** Arc length reveal target for a scroll tip position (§6.1). */
@@ -180,7 +184,9 @@ export function buildTapestryGeometry(
     else if (isWedding) x = knot.medallion.x;
     else if (m.track === 'her') x = preHer.anchorX.get(m.id) ?? xc;
     else if (m.track === 'him') x = preHim.anchorX.get(m.id) ?? xc;
-    else x = xc; // shared: straddles the braid at a sine extreme
+    // shared: straddles the braid at a sine extreme, following the
+    // wandering center axis
+    else x = braid.centerAt(p.y);
     return {
       id: m.id,
       track: m.track,
@@ -202,5 +208,7 @@ export function buildTapestryGeometry(
     medallion: knot.medallion,
     braidCrossingYs: braid.crossings,
     amplitudeAt: braid.amplitudeAt,
+    baseAmplitudeAt: braid.baseAmplitudeAt,
+    centerAt: braid.centerAt,
   };
 }

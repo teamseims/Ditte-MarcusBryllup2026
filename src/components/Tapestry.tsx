@@ -36,6 +36,13 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
   const gapW = w.core + THREAD.gapExtra;
   const off = THREAD.shadowOffset;
 
+  // Hand-stitched sheen: irregular dash rhythm, different per thread —
+  // machine stitching is even, hands are not (organic pass).
+  const sheenDash = {
+    her: '8 5 6 4 9 5 5 6',
+    him: '7 4 9 6 5 5 8 4',
+  } as const;
+
   return (
     <svg
       className="tapestry-svg"
@@ -115,7 +122,7 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
               href={`#thread-${key}`}
               className="t-stitch"
               strokeWidth={w.stitch}
-              strokeDasharray="7 5"
+              strokeDasharray={sheenDash[key]}
             />
           </g>
         </g>
@@ -164,7 +171,7 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
                 className="t-stitch"
                 d={p.d}
                 strokeWidth={w.stitch}
-                strokeDasharray="7 5"
+                strokeDasharray={sheenDash[p.over]}
               />
             </g>
           </g>

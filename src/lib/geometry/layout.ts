@@ -1,5 +1,6 @@
 import type { Milestone, SiteContent } from '../../data/content';
 import type { GeometryConfig } from './config';
+import { createRng, rngRange } from './random';
 
 /**
  * Vertical layout (§4): narrative, not linear time. Milestones sit in global
@@ -45,11 +46,15 @@ export function computeLayout(
     .slice(meetingIdx + 1)
     .filter((m) => m.id !== content.weddingId);
 
+  // Pre-meeting rows breathe unevenly (seeded −55…+65px per gap) — a life
+  // isn't laid out on ruled paper. Post-meeting spacing stays derived from
+  // the braid's phase plan; its irregularity comes from the braid itself.
+  const rowRng = createRng(cfg.seed ^ 0x9a9);
   const placed: PlacedMilestone[] = [];
   let y = cfg.topPad;
   for (const m of preMeeting) {
     placed.push({ milestone: m, y });
-    y += cfg.preSpacing;
+    y += cfg.preSpacing + rngRange(rowRng, -55, 65);
   }
 
   // The meeting is a held moment: extra breathing room before it (§5.3).

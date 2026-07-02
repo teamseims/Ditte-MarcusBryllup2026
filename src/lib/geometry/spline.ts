@@ -23,6 +23,46 @@ export interface XWaypoint {
 }
 
 /**
+ * Hermite evaluator for x(y) through waypoints (Catmull-Rom tangents) —
+ * same math as sampleXofY but returning a callable. Used for the braid's
+ * eased phase φ(y), which passes exactly through the jittered crossing
+ * waypoints while staying smooth between them.
+ */
+export function hermiteXofY(waypoints: XWaypoint[]): (y: number) => number {
+  const n = waypoints.length;
+  const ys = waypoints.map((w) => w.y);
+  const xs = waypoints.map((w) => w.x);
+  const m: number[] = new Array(n);
+  for (let i = 1; i < n - 1; i++) {
+    m[i] = (xs[i + 1] - xs[i - 1]) / (ys[i + 1] - ys[i - 1]);
+  }
+  m[0] = (xs[1] - xs[0]) / (ys[1] - ys[0]);
+  m[n - 1] = (xs[n - 1] - xs[n - 2]) / (ys[n - 1] - ys[n - 2]);
+
+  return (y: number) => {
+    if (y <= ys[0]) return xs[0];
+    if (y >= ys[n - 1]) return xs[n - 1];
+    let lo = 0;
+    let hi = n - 1;
+    while (lo < hi - 1) {
+      const mid = (lo + hi) >> 1;
+      if (ys[mid] <= y) lo = mid;
+      else hi = mid;
+    }
+    const h = ys[hi] - ys[lo];
+    const t = (y - ys[lo]) / h;
+    const t2 = t * t;
+    const t3 = t2 * t;
+    return (
+      (2 * t3 - 3 * t2 + 1) * xs[lo] +
+      (t3 - 2 * t2 + t) * h * m[lo] +
+      (-2 * t3 + 3 * t2) * xs[hi] +
+      (t3 - t2) * h * m[hi]
+    );
+  };
+}
+
+/**
  * Sample x(y) through waypoints with Catmull-Rom finite-difference tangents.
  * Endpoint tangents may be overridden (the meeting kiss needs dx/dy = 0).
  * Every waypoint appears exactly in the output.

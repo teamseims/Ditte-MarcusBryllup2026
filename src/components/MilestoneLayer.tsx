@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import type { SiteContent } from '../data/content';
 import { strings } from '../data/strings';
 import type { TapestryGeometry } from '../lib/geometry';
+import { hashString } from '../lib/geometry/random';
 import { MilestoneMarker } from './MilestoneMarker';
 import { Sprig } from './Sprig';
 
@@ -105,14 +106,18 @@ export function MilestoneLayer({
         );
       })}
 
-      {/* Near-miss whisper labels (§5.2) — revealed when the needle passes */}
+      {/* Near-miss whisper labels (§5.2) — revealed when the needle passes.
+          Centered on the bow's own (slightly off-axis) gap, nudged a touch. */}
       {geometry.nearMisses.map((nm, i) => (
         <p
           key={i}
           className={`nearmiss-label ${
             inkedIds.has(`nearmiss-${i}`) ? 'is-inked' : 'is-ghost'
           }`}
-          style={{ left: geometry.cfg.widthPx / 2, top: nm.y }}
+          style={{
+            left: nm.x + ((hashString(nm.label) % 13) - 6),
+            top: nm.y,
+          }}
         >
           {nm.label}
         </p>
@@ -162,12 +167,15 @@ function MilestoneCard({
   onOpen,
   gap,
 }: CardProps) {
+  // seeded vertical stagger so the gilt rules stop aligning like ruled
+  // paper (organic pass)
+  const cardY = anchor.y - 38 + (hashString(milestone.id) % 25);
   const style: React.CSSProperties =
     side === 'below'
       ? { left: 20, right: 20, top: anchor.y + 46 }
       : side === 'left'
-        ? { left: anchor.x - gap - CARD_WIDTH, top: anchor.y - 26, width: CARD_WIDTH }
-        : { left: anchor.x + gap, top: anchor.y - 26, width: CARD_WIDTH };
+        ? { left: anchor.x - gap - CARD_WIDTH, top: cardY, width: CARD_WIDTH }
+        : { left: anchor.x + gap, top: cardY, width: CARD_WIDTH };
 
   return (
     <div

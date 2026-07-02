@@ -91,6 +91,46 @@ Judgment calls made where the brief left room for interpretation, per §0.
   Chromium for the phase-gate screenshots §14 invites. Zero footprint in
   the shipped site.
 
+## The organic pass
+
+A review after the first complete build judged the page too machine-regular
+("it should feel more organic"). Everything below is seeded — identical on
+every reload — and stays inside the §5.6 test bounds:
+
+- **Un-clocked braid.** The center axis itself wanders ±12 units
+  (low-frequency noise shared by both threads, so phase opposition and
+  every crossing are untouched), pinned to the true center at the kiss and
+  the knot entry. The shared amplitude breathes ±6%; the tightening
+  contract is asserted on the base envelope (`baseAmplitudeAt`), with the
+  noised value bounded to the breathing band. Crossings are jittered ±13px
+  off the uniform grid (spacing stays within 180–260px) and φ is a smooth
+  Hermite through the jittered crossings and the fixed milestone extremes.
+- **Hand tremor.** A fine noise layer (±6 units, ~420px wavelength) rides
+  on the pre-meeting splines, faded to zero at anchors, inside near-miss
+  windows, at the hem, and into the kiss — every tested constraint is
+  untouched. The two tracks use different meander rhythms (different
+  fractions, occasional single meanders), so they stop echoing each other.
+- **Grid break.** Pre-meeting rows breathe −55…+65px per gap; side cards
+  stagger vertically by a per-id hash. Post-meeting spacing stays derived
+  from the braid's phase plan.
+- **Asymmetric set pieces.** Near-miss bows have unequal shoulders and an
+  off-axis, unevenly split gap; the meeting approach uses different offsets
+  per track; the knot's HIS side carries small hand offsets. The knot
+  offsets are confined to the neck and tails: the bottom arc of the design
+  runs near-tangent, and lateral asymmetry there flips the crossing
+  topology (we watched it create spurious grazing crossings at ±5 units —
+  hence the mirror-true bottom).
+- **Micro-details.** The sheen layer uses an irregular multi-pair dash,
+  different per thread; each marker ring's dash pattern is rotated by a
+  per-id hash; the fiber-wobble filter now defaults ON for all ≥720px
+  viewports (not just kiosk), still `?fx=0` to disable.
+- **Aged linen.** One extra static background layer of large-scale
+  turbulence as uneven dye (alpha 0.026 — the first attempt at 0.055 read
+  as water stains) and the candlelight vignette sits slightly off-center.
+- **Hem continuity.** The dangling cue thread-ends sit at the exact lane
+  x-positions and the story threads start on their lanes at the body top,
+  so cue and tapestry read as the same thread passing through the fabric.
+
 ## Kiosk
 
 - `?attract=N` (seconds) previews the attract loop without waiting 75s —

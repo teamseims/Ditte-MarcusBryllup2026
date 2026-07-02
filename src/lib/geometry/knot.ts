@@ -28,6 +28,27 @@ const HER_DESIGN: Pt[] = [
   { x: 30, y: -16 }, // tail ends well inside the medallion disc — tucked
 ];
 
+/**
+ * No hand ties a mirror-perfect bow: HIS side of the knot is the mirror of
+ * HER_DESIGN plus these small hand offsets (units of the same design space).
+ * The offsets are largest where the threads are far apart (the loop sides
+ * and neck) and near zero along the bottom arc and tails, where the threads
+ * run almost parallel — bigger offsets there make them graze and produce
+ * spurious extra crossings. The numeric crossing finder absorbs the rest.
+ */
+const HIM_WOBBLE: Pt[] = [
+  { x: 2, y: -3 }, // neck (steep crossing — robust to offsets)
+  { x: -3, y: 4 },
+  { x: 0, y: 2 },
+  { x: 0, y: -2 },
+  { x: 0, y: 1 },
+  { x: 0, y: 0 }, // bottom arc runs near-tangent — keep it mirror-true
+  { x: 0, y: 0 },
+  { x: 0, y: -1 },
+  { x: 1, y: 2 }, // tails
+  { x: 0, y: 1 },
+];
+
 export interface KnotCrossing {
   x: number;
   y: number;
@@ -63,7 +84,9 @@ export function buildKnot(
   ];
   const himWay: Pt[] = [
     { x: xc - braidEndAmp, y: yBraidEnd },
-    ...HER_DESIGN.map((p) => mirror(p, -1)),
+    ...HER_DESIGN.map((p, i) =>
+      mirror({ x: p.x + HIM_WOBBLE[i].x, y: p.y + HIM_WOBBLE[i].y }, -1),
+    ),
   ];
 
   return {

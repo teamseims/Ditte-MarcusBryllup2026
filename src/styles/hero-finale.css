@@ -53,10 +53,11 @@
   position: relative;
 }
 
-/* the tapestry's top hem — the loose thread-ends dangle from this line */
+/* the tapestry's top hem — the loose thread-ends dangle from this line,
+   at the same x as the story threads that begin below the fold */
 .hero-hem {
   position: absolute;
-  bottom: 117px;
+  bottom: 96px;
   left: 8%;
   right: 8%;
   height: 0;
@@ -64,24 +65,21 @@
   opacity: 0.5;
 }
 
-.hero-cue-wrap {
-  position: absolute;
-  bottom: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.hero-cue-wrap .hero-cue {
-  margin-top: 0;
-}
-
 .hero-threads {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
   display: block;
   overflow: visible;
+  pointer-events: none;
+}
+
+.hero .hero-cue {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
 }
 
 .dangle {

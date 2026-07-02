@@ -46,6 +46,8 @@
   fill: none;
   stroke-width: 2;
   stroke-linecap: round;
+  /* seeded per-marker rotation of the stitched ring pattern */
+  stroke-dashoffset: var(--ring-shift, 0);
 }
 
 .marker-emblem .disc {

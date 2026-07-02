@@ -64,15 +64,24 @@ describe('braid crossings — the woven-ness guarantee', () => {
   });
 
   it('braid amplitude tightens monotonically from first extreme to the knot', () => {
+    // The rendered amplitude carries ±6% seeded "breathing" (organic pass);
+    // the tightening contract holds on the base envelope, and the noised
+    // value must stay within the breathing band.
     const yFirstExtreme = g.layout.yMeet + 2.5 * cfg.crossingSpacing;
     let prev = Infinity;
     for (let y = yFirstExtreme; y <= g.layout.yBraidEnd; y += 50) {
-      const a = g.amplitudeAt(y);
-      expect(a).toBeLessThanOrEqual(prev + 1e-9);
-      prev = a;
+      const base = g.baseAmplitudeAt(y);
+      expect(base).toBeLessThanOrEqual(prev + 1e-9);
+      prev = base;
+      expect(Math.abs(g.amplitudeAt(y) - base)).toBeLessThanOrEqual(
+        base * 0.065,
+      );
     }
-    expect(g.amplitudeAt(yFirstExtreme)).toBeCloseTo(cfg.braidAmpStart, 5);
-    expect(g.amplitudeAt(g.layout.yBraidEnd)).toBeCloseTo(cfg.braidAmpEnd, 5);
+    expect(g.baseAmplitudeAt(yFirstExtreme)).toBeCloseTo(cfg.braidAmpStart, 5);
+    expect(g.baseAmplitudeAt(g.layout.yBraidEnd)).toBeCloseTo(
+      cfg.braidAmpEnd,
+      5,
+    );
   });
 
   it('shared milestones sit at sine extremes (threads furthest apart)', () => {
@@ -171,8 +180,10 @@ describe('the knot (§5.5)', () => {
     }
   });
 
-  it('knot crossing finder is symmetric in her/him arc lengths', () => {
-    // mirror-symmetric design → crossing i on her matches a crossing on him
+  it('knot crossings pair up roughly across the two threads', () => {
+    // The knot is deliberately not mirror-perfect (organic pass): HIS side
+    // carries small hand offsets. Crossings must still pair up within a
+    // loose band — a blown-out asymmetry would break the bow reading.
     const kc = findKnotCrossings(
       g.her.polyline.pts.slice(g.her.monotoneIdx).map((p) => ({ x: p.x, y: p.y })),
       g.him.polyline.pts.slice(g.him.monotoneIdx).map((p) => ({ x: p.x, y: p.y })),
@@ -180,7 +191,7 @@ describe('the knot (§5.5)', () => {
     const herLens = kc.map((c) => c.herLen).sort((a, b) => a - b);
     const himLens = kc.map((c) => c.himLen).sort((a, b) => a - b);
     for (let i = 0; i < herLens.length; i++) {
-      expect(Math.abs(herLens[i] - himLens[i])).toBeLessThan(8);
+      expect(Math.abs(herLens[i] - himLens[i])).toBeLessThan(45);
     }
   });
 });

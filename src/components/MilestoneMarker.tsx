@@ -1,5 +1,7 @@
+import type { CSSProperties } from 'react';
 import type { Milestone } from '../data/content';
 import type { Anchor } from '../lib/geometry';
+import { hashString } from '../lib/geometry/random';
 import { Icon } from '../lib/icons/Icon';
 
 /**
@@ -38,6 +40,10 @@ export function MilestoneMarker({
       ? 'meeting'
       : anchor.track;
 
+  // seeded ring-dash rotation so the stitched rings don't all "start"
+  // at the same angle (organic pass)
+  const ringShift = hashString(milestone.id) % 8;
+
   return (
     <button
       ref={buttonRef}
@@ -46,7 +52,13 @@ export function MilestoneMarker({
       className={`marker marker-${variant} ${inked ? 'is-inked' : 'is-ghost'}${
         pulsing ? ' is-pulsing' : ''
       }`}
-      style={{ left: anchor.x, top: anchor.y }}
+      style={
+        {
+          left: anchor.x,
+          top: anchor.y,
+          '--ring-shift': `${ringShift}px`,
+        } as CSSProperties
+      }
       aria-label={`${milestone.dateLabel} — ${milestone.title}`}
       onClick={() => onOpen(milestone.id)}
     >
