@@ -1,0 +1,182 @@
+/* Hero and finale (§4, §9). */
+
+/* ── stitched display lettering ── */
+.stitched-names {
+  width: 100%;
+  font-size: var(--size-names);
+  font-weight: 480;
+  line-height: 1.15;
+}
+
+.stitched-names svg {
+  display: block;
+  width: 100%;
+  height: 1.3em;
+  overflow: visible;
+}
+
+.stitched-names text {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 1em;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.stitched-fill {
+  fill: var(--ink);
+}
+
+/* the embroidery: a fine dashed gilt overlay stroke */
+.stitched-over {
+  fill: none;
+  stroke: var(--gilt);
+  stroke-width: 1;
+  stroke-dasharray: 3 3.5;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.stitched-amp {
+  fill: var(--gilt);
+  font-style: italic;
+  font-weight: 340;
+}
+
+.stitched-over .stitched-amp {
+  fill: none;
+}
+
+/* ── hero hem + dangling threads scroll cue ── */
+.hero {
+  border-bottom: none;
+  position: relative;
+}
+
+/* the tapestry's top hem — the loose thread-ends dangle from this line */
+.hero-hem {
+  position: absolute;
+  bottom: 117px;
+  left: 8%;
+  right: 8%;
+  height: 0;
+  border-bottom: 2px dashed var(--gilt);
+  opacity: 0.5;
+}
+
+.hero-cue-wrap {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.hero-cue-wrap .hero-cue {
+  margin-top: 0;
+}
+
+.hero-threads {
+  display: block;
+  overflow: visible;
+}
+
+.dangle {
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: round;
+  transform-origin: 50% 0;
+  animation: dangle-sway 3.6s ease-in-out infinite alternate;
+}
+
+.dangle-her {
+  stroke: var(--madder);
+}
+
+.dangle-him {
+  stroke: var(--woad);
+  animation-duration: 4.4s;
+  animation-delay: -1.2s;
+}
+
+@keyframes dangle-sway {
+  from {
+    transform: rotate(-3.5deg);
+  }
+  to {
+    transform: rotate(3.5deg);
+  }
+}
+
+/* ── finale ── */
+.finale {
+  position: relative;
+  gap: 1.1rem;
+}
+
+/* very subtle warm candle glow behind the finale (§2) */
+.finale-glow {
+  position: absolute;
+  width: 980px;
+  height: 980px;
+  max-width: 200vw;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(184, 137, 46, 0.13),
+    rgba(184, 137, 46, 0.05) 42%,
+    transparent 68%
+  );
+}
+
+.finale-particles {
+  position: absolute;
+  inset: -30vh 0 40% 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  animation-name: particle-drift;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+
+.particle-petal {
+  border-radius: 60% 40% 55% 45%;
+}
+
+.particle-spark {
+  border-radius: 50%;
+}
+
+@keyframes particle-drift {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0);
+  }
+  12% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), 46vh) rotate(var(--rot));
+  }
+}
+
+/* reduced motion (§13): no sway, no particles */
+@media (prefers-reduced-motion: reduce) {
+  .dangle {
+    animation: none;
+  }
+  .finale-particles {
+    display: none;
+  }
+}

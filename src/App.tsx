@@ -11,9 +11,12 @@ import { Sprig } from './components/Sprig';
 import { Tapestry } from './components/Tapestry';
 import { MilestoneLayer } from './components/MilestoneLayer';
 import { GalleryModal } from './components/GalleryModal';
+import { StitchedNames } from './components/StitchedText';
+import { FinaleParticles } from './components/FinaleParticles';
 import './styles/threads.css';
 import './styles/milestones.css';
 import './styles/gallery.css';
+import './styles/hero-finale.css';
 
 /**
  * App shell. Routes:
@@ -94,6 +97,25 @@ export default function App() {
     onInked: setInkedIds,
   });
 
+  // Finale particles: once per session, on first arrival (§9).
+  const finaleRef = useRef<HTMLElement>(null);
+  const [particlesFired, setParticlesFired] = useState(false);
+  useEffect(() => {
+    const el = finaleRef.current;
+    if (!el || reducedMotion) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setParticlesFired(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [reducedMotion]);
+
   const openMilestone = openId
     ? content.milestones.find((m) => m.id === openId)
     : undefined;
@@ -116,13 +138,25 @@ export default function App() {
       <Sprig kind="branch" style={{ bottom: 24, right: 24, transform: 'scale(-1)' }} />
 
       <header className="hero">
-        <h1 className="hero-names">
-          {content.her.name} <span className="hero-amp">&amp;</span>{' '}
-          {content.him.name}
-        </h1>
+        <StitchedNames her={content.her.name} him={content.him.name} />
         <p className="hero-line">{content.heroLine}</p>
         <p className="chip">{content.weddingDate}</p>
-        <p className="chip hero-cue">{strings.scrollCue}</p>
+
+        {/* the top hem: loose thread-ends dangle from it (§4) */}
+        <div className="hero-hem" aria-hidden="true" />
+        <div className="hero-cue-wrap">
+          <svg
+            className="hero-threads"
+            width="110"
+            height="78"
+            viewBox="0 0 110 78"
+            aria-hidden="true"
+          >
+            <path className="dangle dangle-her" d="M40 2 C 37 26, 46 42, 39 66" />
+            <path className="dangle dangle-him" d="M70 2 C 74 24, 65 44, 72 62" />
+          </svg>
+          <p className="chip hero-cue">{strings.scrollCue}</p>
+        </div>
       </header>
 
       <main
@@ -130,6 +164,12 @@ export default function App() {
         className="tapestry-body"
         style={{ height: geometry.layout.bodyHeight }}
       >
+        {/* subtle warm glow behind the knot and finale (§2) */}
+        <div
+          className="finale-glow"
+          aria-hidden="true"
+          style={{ left: geometry.medallion.x, top: geometry.medallion.y }}
+        />
         <Tapestry geometry={geometry} fiberFx={fiberFx} />
         <MilestoneLayer
           geometry={geometry}
@@ -141,11 +181,13 @@ export default function App() {
         />
       </main>
 
-      <footer className="finale">
-        <h2 className="hero-names">
-          {content.her.name} <span className="hero-amp">&amp;</span>{' '}
-          {content.him.name}
-        </h2>
+      <footer ref={finaleRef} className="finale">
+        <FinaleParticles fired={particlesFired} />
+        <StitchedNames
+          as="h2"
+          her={content.her.name}
+          him={content.him.name}
+        />
         <p className="chip">{content.weddingDate}</p>
         <p className="hero-line">{strings.closingLine}</p>
       </footer>
