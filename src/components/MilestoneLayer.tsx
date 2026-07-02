@@ -22,6 +22,8 @@ interface MilestoneLayerProps {
   content: SiteContent;
   /** ids of milestones whose needle has passed (Phase 4 drives this) */
   inkedIds: ReadonlySet<string>;
+  /** marker to pulse after a deep-link arrival (§8) */
+  pulseId?: string | null;
   onOpen: (id: string) => void;
   markerRef?: (id: string, el: HTMLButtonElement | null) => void;
 }
@@ -33,6 +35,7 @@ export function MilestoneLayer({
   geometry,
   content,
   inkedIds,
+  pulseId,
   onOpen,
   markerRef,
 }: MilestoneLayerProps) {
@@ -66,6 +69,7 @@ export function MilestoneLayer({
               milestone={milestone}
               anchor={anchor}
               inked={inked}
+              pulsing={pulseId === milestone.id}
               onOpen={onOpen}
               buttonRef={
                 markerRef ? (el) => markerRef(milestone.id, el) : undefined

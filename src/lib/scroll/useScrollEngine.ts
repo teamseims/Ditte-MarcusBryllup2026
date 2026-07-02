@@ -25,6 +25,8 @@ export interface ScrollEngineOptions {
   /** the progress stitch fill element */
   progressRef: React.RefObject<HTMLDivElement | null>;
   reducedMotion: boolean;
+  /** pause the loop (modal open): body is position-fixed, scrollY lies */
+  paused?: boolean;
   /** called when the set of passed markers/near-misses changes */
   onInked: (ids: Set<string>) => void;
 }
@@ -34,6 +36,7 @@ export function useScrollEngine({
   bodyRef,
   progressRef,
   reducedMotion,
+  paused = false,
   onInked,
 }: ScrollEngineOptions): void {
   // keep the latest callback without restarting the loop
@@ -60,6 +63,7 @@ export function useScrollEngine({
       onInkedRef.current(new Set(thresholds.map((t) => t.key)));
       return;
     }
+    if (paused) return; // keep the current visual state frozen
 
     // ── collect elements once ──
     const reveals = Array.from(
@@ -189,5 +193,5 @@ export function useScrollEngine({
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', onResize);
     };
-  }, [geometry, reducedMotion, bodyRef, progressRef]);
+  }, [geometry, reducedMotion, paused, bodyRef, progressRef]);
 }

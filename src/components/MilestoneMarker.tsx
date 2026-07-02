@@ -18,6 +18,7 @@ interface MarkerProps {
   milestone: Milestone;
   anchor: Anchor;
   inked: boolean;
+  pulsing?: boolean;
   onOpen: (id: string) => void;
   buttonRef?: (el: HTMLButtonElement | null) => void;
 }
@@ -26,6 +27,7 @@ export function MilestoneMarker({
   milestone,
   anchor,
   inked,
+  pulsing = false,
   onOpen,
   buttonRef,
 }: MarkerProps) {
@@ -41,7 +43,9 @@ export function MilestoneMarker({
       ref={buttonRef}
       type="button"
       id={`marker-${milestone.id}`}
-      className={`marker marker-${variant} ${inked ? 'is-inked' : 'is-ghost'}`}
+      className={`marker marker-${variant} ${inked ? 'is-inked' : 'is-ghost'}${
+        pulsing ? ' is-pulsing' : ''
+      }`}
       style={{ left: anchor.x, top: anchor.y }}
       aria-label={`${milestone.dateLabel} — ${milestone.title}`}
       onClick={() => onOpen(milestone.id)}

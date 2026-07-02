@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { content } from './data/content';
 import { strings } from './data/strings';
 import { hasPlaceholderContent } from './lib/validateContent';
@@ -10,8 +10,10 @@ import { useScrollEngine } from './lib/scroll/useScrollEngine';
 import { Sprig } from './components/Sprig';
 import { Tapestry } from './components/Tapestry';
 import { MilestoneLayer } from './components/MilestoneLayer';
+import { GalleryModal } from './components/GalleryModal';
 import './styles/threads.css';
 import './styles/milestones.css';
+import './styles/gallery.css';
 
 /**
  * App shell. Routes:
@@ -40,13 +42,61 @@ export default function App() {
   const progressRef = useRef<HTMLDivElement>(null);
   const [inkedIds, setInkedIds] = useState<ReadonlySet<string>>(new Set());
 
+  // ── gallery modal state + deep links (§8) ──
+  const [openId, setOpenId] = useState<string | null>(null);
+  const markerRefs = useRef(new Map<string, HTMLButtonElement>());
+  const registerMarker = useCallback(
+    (id: string, el: HTMLButtonElement | null) => {
+      if (el) markerRefs.current.set(id, el);
+      else markerRefs.current.delete(id);
+    },
+    [],
+  );
+
+  const openGallery = useCallback((id: string) => {
+    setOpenId(id);
+    history.replaceState(null, '', `#${id}`);
+  }, []);
+
+  const closeGallery = useCallback(() => {
+    setOpenId((id) => {
+      if (id) {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+        // return focus to the opening marker (§8)
+        requestAnimationFrame(() => markerRefs.current.get(id)?.focus());
+      }
+      return null;
+    });
+  }, []);
+
+  // Loading with #milestone-id scrolls to the marker and pulses it (§8).
+  const [pulseId, setPulseId] = useState<string | null>(null);
+  useEffect(() => {
+    const id = window.location.hash.slice(1);
+    if (!id) return;
+    const anchor = geometry.anchors.find((a) => a.id === id);
+    const body = bodyRef.current;
+    if (!anchor || !body) return;
+    const bodyTop = body.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo(0, Math.max(0, bodyTop + anchor.y - window.innerHeight * 0.42));
+    setPulseId(id);
+    const t = setTimeout(() => setPulseId(null), 3400);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useScrollEngine({
     geometry,
     bodyRef,
     progressRef,
     reducedMotion,
+    paused: openId !== null,
     onInked: setInkedIds,
   });
+
+  const openMilestone = openId
+    ? content.milestones.find((m) => m.id === openId)
+    : undefined;
 
   return (
     <div className="page">
@@ -85,7 +135,9 @@ export default function App() {
           geometry={geometry}
           content={content}
           inkedIds={inkedIds}
-          onOpen={(id) => console.log('open gallery:', id)}
+          pulseId={pulseId}
+          onOpen={openGallery}
+          markerRef={registerMarker}
         />
       </main>
 
@@ -104,6 +156,10 @@ export default function App() {
       </div>
 
       <div className="vignette" aria-hidden="true" />
+
+      {openMilestone && (
+        <GalleryModal milestone={openMilestone} onClose={closeGallery} />
+      )}
     </div>
   );
 }
