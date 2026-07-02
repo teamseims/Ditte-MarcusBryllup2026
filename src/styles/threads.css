@@ -1,0 +1,58 @@
+/* Thread embroidery styling (§6). Geometry lives in the SVG; color here. */
+
+.tapestry-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  pointer-events: none;
+}
+
+.tapestry-svg use,
+.tapestry-svg path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* layer colors per thread */
+.thread-her .t-shadow,
+.patch-her .t-shadow {
+  stroke: var(--madder-deep);
+  opacity: 0.5;
+}
+.thread-her .t-core,
+.patch-her .t-core {
+  stroke: var(--madder);
+}
+.thread-her .t-stitch,
+.patch-her .t-stitch {
+  stroke: var(--madder-light);
+  opacity: 0.65;
+}
+
+.thread-him .t-shadow,
+.patch-him .t-shadow {
+  stroke: var(--woad-deep);
+  opacity: 0.5;
+}
+.thread-him .t-core,
+.patch-him .t-core {
+  stroke: var(--woad);
+}
+.thread-him .t-stitch,
+.patch-him .t-stitch {
+  stroke: var(--woad-light);
+  opacity: 0.65;
+}
+
+/* the weave illusion: flax gap stroke breaks the under thread cleanly */
+.p-gap {
+  stroke: var(--flax);
+  stroke-linecap: butt;
+}
+
+.medallion-disc {
+  fill: var(--flax);
+  stroke: none;
+}

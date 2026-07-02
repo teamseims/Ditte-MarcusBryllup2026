@@ -1,7 +1,13 @@
+import { useMemo } from 'react';
 import { content } from './data/content';
 import { strings } from './data/strings';
 import { hasPlaceholderContent } from './lib/validateContent';
+import { buildTapestryGeometry } from './lib/geometry';
+import { configFor } from './lib/geometry/config';
+import { useViewport } from './lib/useViewport';
 import { Sprig } from './components/Sprig';
+import { Tapestry } from './components/Tapestry';
+import './styles/threads.css';
 
 /**
  * App shell. Routes:
@@ -10,6 +16,12 @@ import { Sprig } from './components/Sprig';
  *   ?mode=kiosk  kiosk behaviors (added in a later phase)
  */
 export default function App() {
+  const { width } = useViewport();
+  const geometry = useMemo(
+    () => buildTapestryGeometry(content, configFor(width)),
+    [width],
+  );
+
   return (
     <div className="page">
       {hasPlaceholderContent(content) && (
@@ -37,8 +49,11 @@ export default function App() {
         <p className="chip hero-cue">{strings.scrollCue}</p>
       </header>
 
-      <main className="tapestry-body" style={{ height: 3000 }}>
-        {/* Threads arrive in Phase 2 */}
+      <main
+        className="tapestry-body"
+        style={{ height: geometry.layout.bodyHeight }}
+      >
+        <Tapestry geometry={geometry} />
       </main>
 
       <footer className="finale">
