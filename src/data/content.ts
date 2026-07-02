@@ -39,6 +39,12 @@
 
 import type { IconName } from '../lib/icons/iconPaths';
 
+/**
+ * The site's canonical URL — used by the /qr poster (§12).
+ * Simon: after the first Vercel deploy, put the real URL here and reprint.
+ */
+export const SITE_URL = 'https://REPLACE-ME.vercel.app';
+
 export type Track = 'her' | 'him' | 'shared';
 
 export interface GalleryImage {

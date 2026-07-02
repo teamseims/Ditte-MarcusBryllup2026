@@ -14,6 +14,8 @@ import { GalleryModal } from './components/GalleryModal';
 import { StitchedNames } from './components/StitchedText';
 import { FinaleParticles } from './components/FinaleParticles';
 import { KioskController } from './kiosk/KioskController';
+import { QrView } from './components/QrView';
+import './styles/qr.css';
 import './styles/threads.css';
 import './styles/milestones.css';
 import './styles/gallery.css';
@@ -29,8 +31,14 @@ import './styles/hero-finale.css';
 const params = new URLSearchParams(window.location.search);
 const KIOSK = params.get('mode') === 'kiosk';
 const FX = params.get('fx');
+const QR = window.location.pathname === '/qr' || params.get('qr') === '1';
 
 export default function App() {
+  if (QR) return <QrView />;
+  return <TapestryPage />;
+}
+
+function TapestryPage() {
   const { width } = useViewport();
   const reducedMotion = useReducedMotion();
   const geometry = useMemo(

@@ -1,0 +1,70 @@
+/* QR poster (§12) — screen preview and A5 print. */
+
+.qr-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  text-align: center;
+  padding: 6vh 8vw;
+}
+
+.qr-page .stitched-names {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+}
+
+.qr-frame {
+  margin-top: 1.2rem;
+  padding: 18px;
+  border: 2px dashed var(--gilt);
+  border-radius: 10px;
+  background: var(--flax);
+}
+
+.qr-code {
+  display: block;
+  width: min(58vw, 340px);
+  height: auto;
+  aspect-ratio: 1;
+}
+
+.qr-code path {
+  fill: var(--ink);
+}
+
+.qr-cue {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--ink-soft);
+  margin-top: 0.6rem;
+}
+
+.qr-url {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--gilt-deep);
+}
+
+@media print {
+  @page {
+    size: A5 portrait;
+    margin: 12mm;
+  }
+  .qr-page {
+    min-height: auto;
+    padding: 0;
+    gap: 8mm;
+  }
+  .qr-code {
+    width: 78mm;
+  }
+  .placeholder-ribbon,
+  .vignette,
+  .progress-stitch {
+    display: none !important;
+  }
+}
