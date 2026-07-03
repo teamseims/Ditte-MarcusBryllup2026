@@ -131,6 +131,32 @@ every reload — and stays inside the §5.6 test bounds:
   x-positions and the story threads start on their lanes at the body top,
   so cue and tapestry read as the same thread passing through the fabric.
 
+## The stitch animation (supersedes §6.1's needles)
+
+The brief specified needle tips riding the thread ends. The owner's
+direction after seeing it: **no visible needle — the thread itself should
+stitch as an animation.** The needles are removed and the reveal now sews:
+
+- the visible tip chases the scroll target in whole stitches (16px of
+  arc), each tug settling over ~55ms — thread pulled through in beats,
+  not extruded;
+- the freshest 3 stitches render as discrete running stitches (a `4 12`
+  dash layer pinned to the path — one dash period = one stitch quantum,
+  so every tug lays exactly one stitch), revealed through a sliding
+  y-window and swallowed by the solid core as the tip moves on: the
+  thread visibly pulls snug;
+- crossing patches ride the snug thread, not the loose tail;
+- inside the knot the tail fades to zero (the path stops being
+  y-monotone there, and the final moment reads better sewn solid);
+- scrolling up runs the cycle backwards — the tapestry un-sews;
+- reduced motion: the loop never runs, the tail windows stay at height 0,
+  threads render fully drawn exactly as before.
+
+Marker ink-in stays keyed to the un-lagged scroll target: during fast
+flicks the animated tip trails by design, and cards inking a beat before
+the thread arrives is imperceptible; keying them to the animated tip
+would make deep anchor links feel sluggish instead.
+
 ## Names typeface
 
 The owner asked for Adobe's **Mr Keningbeck Pro** for the couple's names.

@@ -74,6 +74,22 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
             height={layout.bodyHeight}
           />
         </clipPath>
+        {/* Tail clips: each thread's freshest few stitches show as discrete
+            running stitches inside this window before the solid line
+            swallows them — the "pull snug" of the stitch animation (§6.1,
+            owner direction). Height 0 by default: under reduced motion the
+            loose stitches never appear. */}
+        {(['her', 'him'] as const).map((key) => (
+          <clipPath key={key} id={`tail-clip-${key}`}>
+            <rect
+              data-tail-rect={key}
+              x="0"
+              y="0"
+              width={cfg.widthPx}
+              height="0"
+            />
+          </clipPath>
+        ))}
         {fiberFx && (
           <filter id="fiber-wobble" x="-2%" y="-1%" width="104%" height="102%">
             <feTurbulence
@@ -117,6 +133,17 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
             strokeWidth={w.core}
             strokeDasharray={len}
           />
+          {/* the freshest stitches: discrete running stitches (dash pattern
+              pinned to the path, so they never crawl) revealed only inside
+              the sliding tail window, then covered by the solid core */}
+          <g clipPath={`url(#tail-clip-${key})`}>
+            <use
+              href={`#thread-${key}`}
+              className="t-core t-fresh"
+              strokeWidth={w.core}
+              strokeDasharray="4 12"
+            />
+          </g>
           <g clipPath="url(#tip-clip)">
             <use
               href={`#thread-${key}`}
@@ -188,16 +215,6 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
         r={medallion.r + 6}
       />
 
-      {/* ── needle tips (§6.1): they "sew" the tapestry as you scroll ──
-          Positioned per frame by the scroll engine; eye at the thread tip,
-          point leading ~24px ahead along the local tangent. */}
-      {(['her', 'him'] as const).map((key) => (
-        <g key={key} data-needle={key} className="needle" opacity="0">
-          <line className="needle-shaft" x1="0" y1="0" x2="24" y2="0" />
-          <circle className="needle-eye" cx="-1.5" cy="0" r="2.4" />
-          <line className="needle-glint" x1="16" y1="-1.6" x2="21" y2="-2.8" />
-        </g>
-      ))}
     </svg>
   );
 }

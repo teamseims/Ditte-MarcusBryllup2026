@@ -57,33 +57,12 @@
   stroke: none;
 }
 
-/* ── needle tips (§6.1) ── */
-.needle {
-  transition: opacity 0.35s ease;
-}
-.needle line,
-.needle circle {
-  fill: none;
-  stroke-linecap: round;
-}
-.needle-shaft {
-  stroke: var(--gilt-deep);
-  stroke-width: 2.4;
-}
-.needle-eye {
-  stroke: var(--gilt-deep);
-  stroke-width: 1.5;
-}
-.needle-glint {
-  stroke: var(--gilt-light);
-  stroke-width: 1.2;
-}
-
-/* reduced motion: needles never appear (§13) */
-@media (prefers-reduced-motion: reduce) {
-  .needle {
-    display: none;
-  }
+/* ── the stitch animation's loose tail (§6.1, owner direction) ──
+   Freshly sewn stitches, not yet pulled tight: a whisper lighter than the
+   snug thread they tighten into. Their clip window is height 0 by default,
+   so under reduced motion they simply never appear. */
+.t-fresh {
+  opacity: 0.94;
 }
 
 /* ── scroll progress stitch (§4): 2px gilt stitch line, right edge ── */
