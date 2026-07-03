@@ -21,6 +21,12 @@
   --gilt-deep: #8a6620;
   --gilt-light: #d4a94f;
 
+  /* THE CHILD's thread (childId in content.ts): a blend of madder and woad
+     — heather, born of both dyes */
+  --heather: #775365;
+  --heather-deep: #513845;
+  --heather-light: #a9918f;
+
   /* Convenience mixes (still derived from the palette above) */
   --ink-soft: rgba(51, 38, 27, 0.72);
   --ink-faint: rgba(51, 38, 27, 0.4);

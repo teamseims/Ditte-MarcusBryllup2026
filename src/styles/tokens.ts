@@ -15,6 +15,9 @@ export const COLORS = {
   gilt: '#b8892e',
   giltDeep: '#8a6620',
   giltLight: '#d4a94f',
+  heather: '#775365',
+  heatherDeep: '#513845',
+  heatherLight: '#a9918f',
   ink: '#33261b',
 } as const;
 
@@ -28,4 +31,9 @@ export const THREAD = {
   /** shadow stitch offset, down-right (§6) */
   shadowOffset: 1.5,
   mobileWidthDelta: -1.5,
+  /** the child's thread is smaller (mobile subtracts 1) */
+  childShadowWidth: 5.5,
+  childCoreWidth: 4,
+  childStitchWidth: 1.5,
+  childMobileDelta: -1,
 } as const;

@@ -84,9 +84,10 @@ export function useScrollEngine({
     if (paused) return; // keep the current visual state frozen
 
     // ── collect elements once ──
+    type ThreadKey = 'her' | 'him' | 'child';
     const reveals = Array.from(
       svg.querySelectorAll<SVGGraphicsElement>('[data-layer="reveal"]'),
-    ).map((el) => ({ el, thread: el.dataset.thread as 'her' | 'him' }));
+    ).map((el) => ({ el, thread: el.dataset.thread as ThreadKey }));
 
     const patchEls = Array.from(
       svg.querySelectorAll<SVGGraphicsElement>('[data-layer="patch"]'),
@@ -99,22 +100,31 @@ export function useScrollEngine({
     }));
 
     const tipRect = svg.querySelector<SVGRectElement>('[data-tip-rect]');
-    const tailRects = {
-      her: svg.querySelector<SVGRectElement>('[data-tail-rect="her"]'),
-      him: svg.querySelector<SVGRectElement>('[data-tail-rect="him"]'),
-    };
+    const keys: ThreadKey[] = geometry.child
+      ? ['her', 'him', 'child']
+      : ['her', 'him'];
+    const tailRects = Object.fromEntries(
+      keys.map((k) => [
+        k,
+        svg.querySelector<SVGRectElement>(`[data-tail-rect="${k}"]`),
+      ]),
+    ) as Record<ThreadKey, SVGRectElement | null>;
 
-    const threads: Record<'her' | 'him', ThreadGeom> = {
+    const threads = {
       her: geometry.her,
       him: geometry.him,
-    };
+      ...(geometry.child ? { child: geometry.child } : {}),
+    } as Record<ThreadKey, ThreadGeom>;
 
     // body offset within the document — geometry rebuilds on resize, so
     // reading it once per build is safe.
     const bodyTop = body.getBoundingClientRect().top + window.scrollY;
 
     // the animated tip position (arc length) per thread
-    const displayed = { her: 0, him: 0 };
+    const displayed = Object.fromEntries(keys.map((k) => [k, 0])) as Record<
+      ThreadKey,
+      number
+    >;
 
     let raf = 0;
     let lastScroll = -1;
@@ -140,7 +150,7 @@ export function useScrollEngine({
         const chase = 1 - Math.exp(-dt / TAU);
         settled = true;
 
-        for (const key of ['her', 'him'] as const) {
+        for (const key of keys) {
           const thread = threads[key];
           const total = thread.polyline.totalLen;
 

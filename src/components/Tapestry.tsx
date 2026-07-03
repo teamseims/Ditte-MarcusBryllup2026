@@ -26,12 +26,18 @@ interface TapestryProps {
 }
 
 export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
-  const { her, him, patches, medallion, cfg, layout } = geometry;
+  const { her, him, child, patches, medallion, cfg, layout } = geometry;
   const mobile = cfg.widthPx < 720;
   const w = {
     shadow: THREAD.shadowWidth + (mobile ? THREAD.mobileWidthDelta : 0),
     core: THREAD.coreWidth + (mobile ? THREAD.mobileWidthDelta : 0),
     stitch: Math.max(1.2, THREAD.stitchWidth + (mobile ? THREAD.mobileWidthDelta : 0)),
+    childShadow: THREAD.childShadowWidth + (mobile ? THREAD.childMobileDelta : 0),
+    childCore: THREAD.childCoreWidth + (mobile ? THREAD.childMobileDelta : 0),
+    childStitch: Math.max(
+      1,
+      THREAD.childStitchWidth + (mobile ? THREAD.childMobileDelta / 2 : 0),
+    ),
   };
   const gapW = w.core + THREAD.gapExtra;
   const off = THREAD.shadowOffset;
@@ -63,6 +69,13 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
           d={him.polyline.d}
           pathLength={him.polyline.totalLen}
         />
+        {child && (
+          <path
+            id="thread-child"
+            d={child.polyline.d}
+            pathLength={child.polyline.totalLen}
+          />
+        )}
         {/* Tip clip: reveals the dashed sheen layers without nesting dashes.
             Height is driven by the scroll engine; static = fully revealed. */}
         <clipPath id="tip-clip">
@@ -79,17 +92,19 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
             swallows them — the "pull snug" of the stitch animation (§6.1,
             owner direction). Height 0 by default: under reduced motion the
             loose stitches never appear. */}
-        {(['her', 'him'] as const).map((key) => (
-          <clipPath key={key} id={`tail-clip-${key}`}>
-            <rect
-              data-tail-rect={key}
-              x="0"
-              y="0"
-              width={cfg.widthPx}
-              height="0"
-            />
-          </clipPath>
-        ))}
+        {(child ? (['her', 'him', 'child'] as const) : (['her', 'him'] as const)).map(
+          (key) => (
+            <clipPath key={key} id={`tail-clip-${key}`}>
+              <rect
+                data-tail-rect={key}
+                x="0"
+                y="0"
+                width={cfg.widthPx}
+                height="0"
+              />
+            </clipPath>
+          ),
+        )}
         {fiberFx && (
           <filter id="fiber-wobble" x="-2%" y="-1%" width="104%" height="102%">
             <feTurbulence
@@ -103,6 +118,47 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
           </filter>
         )}
       </defs>
+
+      {/* ── the child's thread: smaller, in the blend of both dyes, laid
+          UNDER the parents' threads so it passes beneath every crossing —
+          cradled inside the braid ── */}
+      {child && (
+        <g className="thread thread-child">
+          <use
+            href="#thread-child"
+            className="t-shadow"
+            data-thread="child"
+            data-layer="reveal"
+            transform={`translate(${off * 0.8} ${off * 0.8})`}
+            strokeWidth={w.childShadow}
+            strokeDasharray={child.polyline.totalLen}
+          />
+          <use
+            href="#thread-child"
+            className="t-core"
+            data-thread="child"
+            data-layer="reveal"
+            strokeWidth={w.childCore}
+            strokeDasharray={child.polyline.totalLen}
+          />
+          <g clipPath="url(#tail-clip-child)">
+            <use
+              href="#thread-child"
+              className="t-core t-fresh"
+              strokeWidth={w.childCore}
+              strokeDasharray="3 13"
+            />
+          </g>
+          <g clipPath="url(#tip-clip)">
+            <use
+              href="#thread-child"
+              className="t-stitch"
+              strokeWidth={w.childStitch}
+              strokeDasharray="5 5"
+            />
+          </g>
+        </g>
+      )}
 
       {/* ── base threads ── */}
       {(

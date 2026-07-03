@@ -87,6 +87,15 @@
   stroke-dasharray: 3 5;
 }
 
+.marker-child {
+  color: var(--heather);
+}
+.marker-emblem .ring-child {
+  stroke: var(--heather);
+  stroke-dasharray: 2 4;
+  opacity: 0.85;
+}
+
 .marker-wedding {
   color: var(--gilt-deep);
 }

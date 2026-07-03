@@ -49,6 +49,10 @@ fake content can't sneak into the real event.
   - The wedding milestone is last; `meetingId`/`weddingId` point at the
     meeting and wedding entries.
 - **Near-misses** — 0–3 moments the threads almost touched. Optional.
+- **`childId`** — points at the milestone where your child arrived. From
+  there a third, smaller thread (heather — a blend of the two) runs down
+  the middle of the braid and ends inside the heart, behind the medallion.
+  Remove the field if you don't want it.
 
 ### 2. Photos — `public/images/<milestone-id>/`
 

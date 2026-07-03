@@ -79,6 +79,14 @@ export interface SiteContent {
   nearMisses: NearMiss[]; // 0–3 moments the threads almost touched
   meetingId: string; // id of the milestone where the tracks converge
   weddingId: string; // id of the final shared milestone
+  /**
+   * Optional: the milestone where a child arrives. From that point a third,
+   * smaller thread — in a blend of the two thread colors — runs down the
+   * center of the braid and nestles behind the medallion inside the heart.
+   * Must be a 'shared' milestone between the meeting and the wedding.
+   * Omit (or set to undefined) if not wanted.
+   */
+  childId?: string;
 }
 
 /** Helper: placeholder gallery of n images for milestone `id`. */
@@ -89,8 +97,8 @@ const gallery = (id: string, n: number): GalleryImage[] =>
   }));
 
 export const content: SiteContent = {
-  her: { name: 'Ida', birthYear: 1994 },
-  him: { name: 'Jonas', birthYear: 1992 },
+  her: { name: 'Ditte', birthYear: 1994 },
+  him: { name: 'Marcus', birthYear: 1992 },
   weddingDate: '15. august 2026',
   weddingYear: 2026,
   heroLine: '[PLACEHOLDER] To tråde, vævet af hver sin begyndelse.',
@@ -322,14 +330,28 @@ export const content: SiteContent = {
       gallery: gallery('shared-04-frieriet', 7),
     },
     {
-      id: 'shared-05-forberedelserne',
+      // The child (see childId below): from this milestone a third, smaller
+      // thread joins the weave and runs between the two down to the heart.
+      id: 'shared-05-barnet',
+      track: 'shared',
+      year: 2025,
+      dateLabel: '[PLACEHOLDER] Først i 2025',
+      title: '[PLACEHOLDER] Verdens mindste tråd',
+      text: '[PLACEHOLDER] I begyndelsen af 2025 væves en helt ny, lille tråd ind mellem deres to.',
+      longText:
+        '[PLACEHOLDER] Her er plads til historien om det lille menneske — navnet, natten, de første dage og alt det, der ikke kan siges kort.',
+      icon: 'sprout',
+      gallery: gallery('shared-05-barnet', 6),
+    },
+    {
+      id: 'shared-06-forberedelserne',
       track: 'shared',
       year: 2025,
       dateLabel: '2025',
       title: '[PLACEHOLDER] Alting bliver til »vi«',
       text: '[PLACEHOLDER] Prøvesmagninger, gæstelister og en fælles kalender, der aldrig har været så fuld — eller så glad.',
       icon: 'sun',
-      gallery: gallery('shared-05-forberedelserne', 6),
+      gallery: gallery('shared-06-forberedelserne', 6),
     },
 
     // ─────────────────────────── KNUDEN ───────────────────────────
@@ -353,4 +375,5 @@ export const content: SiteContent = {
 
   meetingId: 'moedet',
   weddingId: 'brylluppet',
+  childId: 'shared-05-barnet',
 };

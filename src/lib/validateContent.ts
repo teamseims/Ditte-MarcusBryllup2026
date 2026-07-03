@@ -83,6 +83,27 @@ export function validateContent(content: SiteContent): void {
     }
   }
 
+  // 2b. The child milestone, if declared.
+  if (content.childId !== undefined) {
+    const child = milestones.find((m) => m.id === content.childId);
+    if (!child) {
+      problems.push(
+        `childId='${content.childId}' matcher ingen milepæl. Sæt childId til id'et på barnets milepæl, eller fjern feltet.`,
+      );
+    } else {
+      if (child.track !== 'shared') {
+        problems.push(
+          `Barnets milepæl ('${content.childId}') skal have track: 'shared', ikke '${child.track}'.`,
+        );
+      }
+      if (child.id === meetingId || child.id === weddingId) {
+        problems.push(
+          `childId må ikke pege på mødet eller brylluppet — barnets tråd starter ved sin egen milepæl.`,
+        );
+      }
+    }
+  }
+
   // 3. Galleries and ids.
   const seenIds = new Set<string>();
   for (const m of milestones) {

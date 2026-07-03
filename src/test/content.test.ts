@@ -86,4 +86,22 @@ describe('validateContent catches broken fixtures', () => {
     find(c, 'him-05-sejlerskolen').year = 2001;
     expect(() => validateContent(c)).toThrow(/baglæns/);
   });
+
+  it('rejects a childId that matches no milestone', () => {
+    const c = clone();
+    c.childId = 'findes-ikke';
+    expect(() => validateContent(c)).toThrow(/childId/);
+  });
+
+  it('rejects a child milestone outside the shared track', () => {
+    const c = clone();
+    c.childId = 'her-08-egen-lejlighed';
+    expect(() => validateContent(c)).toThrow(/'shared'/);
+  });
+
+  it('accepts content without a childId', () => {
+    const c = clone();
+    delete c.childId;
+    expect(() => validateContent(c)).not.toThrow();
+  });
 });

@@ -157,6 +157,39 @@ flicks the animated tip trails by design, and cards inking a beat before
 the thread arrives is imperceptible; keying them to the animated tip
 would make deep anchor links feel sluggish instead.
 
+## The heart finale (supersedes the overhand-knot design)
+
+Owner direction: the finale should be "a real heart shape, organic and
+smooth". The hand-designed knot is now a ribbon heart: the threads cross
+at the neck (the heart's notch), rise into lobes that bulge above the
+notch — that bulge is what makes it read as a heart rather than a shield —
+sweep wide in the upper third, taper long to the point, cross again there,
+and the tails weave once through the sides and tuck up behind the
+medallion, which sits like a gem in the heart's upper middle. Four
+numerically-found crossings, over/under alternating, same gap-stroke
+technique. The first attempt (widest point too low, no lobe bulge) read as
+a leaf; documented so nobody regresses to it.
+
+## The child's thread (content.childId)
+
+Ditte and Marcus had a child in early 2025. New optional content field
+`childId`: from that shared milestone a third, smaller thread runs down
+the braid's wandering center axis — cradled between the two — and ends
+behind the medallion, inside the heart. Choices:
+
+- **Color:** `--heather`, mixed from madder and woad (born of both dyes),
+  with its own deep/light variants in tokens.css + tokens.ts.
+- **Rendered beneath the parents' threads**, so it passes under every
+  crossing; the existing flax gap strokes cut it exactly like an
+  under-thread — correct knot-diagram semantics for free.
+- **Its own stitch animation** (thinner strokes, smaller stitches, same
+  16px quantum) and tail window; the tail fades over the last 120px so it
+  finishes sewn snug beneath the medallion.
+- The child milestone gets a unique emblem: the shared two-color ring with
+  an inner heather ring and a sprout icon (new icon).
+- Omitting `childId` removes the thread, the emblem variant, and all of
+  its DOM — validated (must be a shared milestone, not meeting/wedding).
+
 ## Names typeface
 
 The owner asked for Adobe's **Mr Keningbeck Pro** for the couple's names.

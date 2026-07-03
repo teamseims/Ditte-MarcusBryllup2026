@@ -21,6 +21,8 @@ interface MarkerProps {
   anchor: Anchor;
   inked: boolean;
   pulsing?: boolean;
+  /** the child's milestone gets its own emblem (content.childId) */
+  isChild?: boolean;
   onOpen: (id: string) => void;
   buttonRef?: (el: HTMLButtonElement | null) => void;
 }
@@ -30,6 +32,7 @@ export function MilestoneMarker({
   anchor,
   inked,
   pulsing = false,
+  isChild = false,
   onOpen,
   buttonRef,
 }: MarkerProps) {
@@ -38,7 +41,9 @@ export function MilestoneMarker({
     ? 'wedding'
     : isMeeting
       ? 'meeting'
-      : anchor.track;
+      : isChild
+        ? 'child'
+        : anchor.track;
 
   // seeded ring-dash rotation so the stitched rings don't all "start"
   // at the same angle (organic pass)
@@ -76,6 +81,17 @@ export function MilestoneMarker({
           <circle className="ring-him" cx="32" cy="32" r="23" />
           <g transform="translate(19.2 19.2) scale(0.8)">
             <Icon name="sparkle" />
+          </g>
+        </svg>
+      ) : variant === 'child' ? (
+        // born of both threads, with its own small color inside
+        <svg viewBox="0 0 64 64" className="marker-emblem" aria-hidden="true">
+          <circle className="disc" cx="32" cy="32" r="27" />
+          <path className="ring-her" d="M32 6 a26 26 0 0 0 0 52" />
+          <path className="ring-him" d="M32 6 a26 26 0 0 1 0 52" />
+          <circle className="ring-child" cx="32" cy="32" r="21" />
+          <g transform="translate(16 16)">
+            <Icon name={milestone.icon} />
           </g>
         </svg>
       ) : variant === 'shared' ? (

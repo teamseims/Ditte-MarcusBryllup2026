@@ -16,6 +16,7 @@ export type IconName =
   | 'sparkle'
   | 'rings'
   | 'anchor'
-  | 'sun';
+  | 'sun'
+  | 'sprout';
 
 export const ICON_PATHS: Record<IconName, string[]>;

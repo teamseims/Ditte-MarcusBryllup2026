@@ -196,6 +196,35 @@ describe('the knot (§5.5)', () => {
   });
 });
 
+describe("the child's thread (content.childId)", () => {
+  it('starts at the child milestone and runs down the braid center', () => {
+    expect(g.child).toBeDefined();
+    const child = g.child!;
+    const placed = g.anchors.find((a) => a.id === content.childId)!;
+    const pts = child.polyline.pts;
+    expect(Math.abs(pts[0].y - placed.y)).toBeLessThan(1);
+    // hugs the wandering center axis (small tremor allowed)
+    for (let i = 0; i < pts.length - 1; i += 20) {
+      const c = g.centerAt(pts[i].y);
+      expect(Math.abs(pts[i].x - c)).toBeLessThan(20);
+    }
+  });
+
+  it('ends tucked behind the medallion, inside the heart', () => {
+    const pts = g.child!.polyline.pts;
+    const end = pts[pts.length - 1];
+    const dist = Math.hypot(end.x - g.medallion.x, end.y - g.medallion.y);
+    expect(dist).toBeLessThan(g.medallion.r);
+  });
+
+  it('is omitted when content has no childId', () => {
+    const noChild = structuredClone(content);
+    delete noChild.childId;
+    const g2 = buildTapestryGeometry(noChild, cfg);
+    expect(g2.child).toBeUndefined();
+  });
+});
+
 describe('mobile config (§11)', () => {
   it('geometry builds and passes the crossing checks at 390px wide', () => {
     const m = buildTapestryGeometry(content, {

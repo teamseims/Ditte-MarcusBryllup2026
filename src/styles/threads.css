@@ -31,6 +31,19 @@
   opacity: 0.65;
 }
 
+/* the child's thread: heather — a blend of both dyes */
+.thread-child .t-shadow {
+  stroke: var(--heather-deep);
+  opacity: 0.45;
+}
+.thread-child .t-core {
+  stroke: var(--heather);
+}
+.thread-child .t-stitch {
+  stroke: var(--heather-light);
+  opacity: 0.6;
+}
+
 .thread-him .t-shadow,
 .patch-him .t-shadow {
   stroke: var(--woad-deep);

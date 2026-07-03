@@ -71,6 +71,7 @@ export function MilestoneLayer({
               anchor={anchor}
               inked={inked}
               pulsing={pulseId === milestone.id}
+              isChild={milestone.id === content.childId}
               onOpen={onOpen}
               buttonRef={
                 markerRef ? (el) => markerRef(milestone.id, el) : undefined
@@ -79,7 +80,7 @@ export function MilestoneLayer({
             {anchor.isWedding ? (
               <div
                 className={`wedding-cue chip ${inked ? 'is-inked' : 'is-ghost'}`}
-                style={{ left: anchor.x, top: anchor.y + 150 }}
+                style={{ left: anchor.x, top: anchor.y + 192 }}
               >
                 {strings.seeImages}
               </div>

@@ -3,48 +3,53 @@ import { sampleCentripetal2d, type Pt } from './spline';
 
 /**
  * The knot (§5.5) — hand-designed, not generated. Both threads arrive from
- * the braid's final crossing-free approach (her on the right at +A_end, him
- * mirrored), cross at the neck, loop around the gilt medallion, cross again
- * at the bottom, and their tails tuck behind the medallion disc.
+ * the braid, cross at the neck, and tie into a HEART around the gilt
+ * medallion (owner direction: "a real heart shape, organic and smooth"):
+ * HER sweeps out the left lobe and down to the point, HIM mirrors on the
+ * right; they cross once at the neck and once at the heart's point, and
+ * the tails tuck up behind the medallion, inside the heart.
  *
  * The waypoints below are fixed control points parameterized by the
- * medallion center and a single scale factor (mobile shrinks the knot with
- * the medallion). Four self-crossings result — found numerically and
+ * medallion center and a single scale factor (mobile shrinks the heart
+ * with the medallion). Two self-crossings result — found numerically and
  * rendered with the same over/under gap-stroke technique as the braid.
  */
 
 /** Design control points, relative to the medallion center, desktop scale.
- *  HER enters from the right (the braid ends with her at +A_end). */
+ *  HER enters from the right (the braid ends with her at +A_end), descends
+ *  to the neck crossing, then rises up-and-out into the LEFT lobe — the
+ *  bulge above the notch is what makes it read as a true heart — sweeps
+ *  wide, tapers long to the point, and the tail tucks up behind the
+ *  medallion, which sits like a gem in the heart's upper middle. */
 const HER_DESIGN: Pt[] = [
-  { x: -2, y: -198 },
-  { x: -48, y: -148 },
-  { x: -92, y: -80 },
-  { x: -102, y: 5 },
-  { x: -62, y: 80 },
-  { x: 16, y: 104 },
-  { x: 84, y: 62 },
-  { x: 97, y: -8 },
-  { x: 62, y: -26 },
-  { x: 30, y: -16 }, // tail ends well inside the medallion disc — tucked
+  { x: 14, y: -195 }, // easing in from the braid
+  { x: 2, y: -150 }, // neck crossing — the heart's notch
+  { x: -30, y: -172 }, // rising into the lobe
+  { x: -62, y: -180 }, // lobe top, above the notch
+  { x: -98, y: -140 },
+  { x: -112, y: -75 }, // widest, upper third
+  { x: -82, y: 10 },
+  { x: -40, y: 82 }, // long taper
+  { x: 4, y: 148 }, // the heart's point — second crossing
+  { x: 34, y: 96 }, // tail rises inside the heart
+  { x: 12, y: 44 }, // tucked behind the medallion
 ];
 
 /**
- * No hand ties a mirror-perfect bow: HIS side of the knot is the mirror of
- * HER_DESIGN plus these small hand offsets (units of the same design space).
- * The offsets are largest where the threads are far apart (the loop sides
- * and neck) and near zero along the bottom arc and tails, where the threads
- * run almost parallel — bigger offsets there make them graze and produce
- * spurious extra crossings. The numeric crossing finder absorbs the rest.
+ * No hand ties a mirror-perfect heart: HIS side is the mirror of HER_DESIGN
+ * plus these small hand offsets. Kept subtle at the neck and the point
+ * (steep, topology-critical crossings) and along the lobes.
  */
 const HIM_WOBBLE: Pt[] = [
-  { x: 2, y: -3 }, // neck (steep crossing — robust to offsets)
-  { x: -3, y: 4 },
+  { x: 2, y: -3 },
+  { x: 1, y: -2 }, // neck
+  { x: 0, y: 4 },
+  { x: -3, y: 3 }, // lobe top — a touch lower than hers
+  { x: 2, y: -4 },
+  { x: 0, y: -4 }, // widest
+  { x: -2, y: 3 },
   { x: 0, y: 2 },
-  { x: 0, y: -2 },
-  { x: 0, y: 1 },
-  { x: 0, y: 0 }, // bottom arc runs near-tangent — keep it mirror-true
-  { x: 0, y: 0 },
-  { x: 0, y: -1 },
+  { x: 0, y: -1 }, // the point — near-mirror
   { x: 1, y: 2 }, // tails
   { x: 0, y: 1 },
 ];
@@ -70,7 +75,7 @@ export function buildKnot(
   cfg: GeometryConfig,
 ): KnotGeometry {
   const xc = cfg.widthPx / 2;
-  const k = cfg.knotEntryRise / 240; // knot scale rides on the config rise
+  const k = cfg.knotEntryRise / 240; // heart scale rides on the config rise
   const cy = yBraidEnd + cfg.knotEntryRise;
 
   const mirror = (p: Pt, sign: 1 | -1): Pt => ({
@@ -90,10 +95,10 @@ export function buildKnot(
   ];
 
   return {
-    her: sampleCentripetal2d(herWay, 14),
-    him: sampleCentripetal2d(himWay, 14),
+    her: sampleCentripetal2d(herWay, 22),
+    him: sampleCentripetal2d(himWay, 22),
     medallion: { x: xc, y: cy, r: cfg.medallionR },
-    endY: cy + 104 * k,
+    endY: cy + 158 * k,
   };
 }
 

@@ -9,6 +9,7 @@ import {
   placeNearMisses,
   type NearMissPlacement,
 } from './threads';
+import { smoothNoise1d } from './random';
 import type { Pt } from './spline';
 
 /**
@@ -52,6 +53,9 @@ export interface TapestryGeometry {
   layout: TapestryLayout;
   her: ThreadGeom;
   him: ThreadGeom;
+  /** the child's thread (content.childId): from its milestone down the
+   *  center of the braid, ending behind the medallion inside the heart */
+  child?: ThreadGeom;
   patches: CrossingPatch[];
   anchors: Anchor[];
   nearMisses: NearMissPlacement[];
@@ -69,7 +73,7 @@ export function revealLenAt(thread: ThreadGeom, tipY: number): number {
   const { polyline, monotoneIdx, knotStartLen, knotEndY } = thread;
   const knotStartY = polyline.pts[monotoneIdx].y;
   if (tipY <= knotStartY) return polyline.lenAtY(tipY, monotoneIdx);
-  if (tipY >= knotEndY) return polyline.totalLen;
+  if (tipY >= knotEndY || knotEndY <= knotStartY) return polyline.totalLen;
   const t = (tipY - knotStartY) / (knotEndY - knotStartY);
   return knotStartLen + t * (polyline.totalLen - knotStartLen);
 }
@@ -122,6 +126,42 @@ export function buildTapestryGeometry(
   };
   const her = joinThread(preHer.samples, braid.her, knot.her);
   const him = joinThread(preHim.samples, braid.him, knot.him);
+
+  // ── the child's thread ──
+  // A smaller thread in the blend of both dyes: it emerges from the child
+  // milestone's marker, runs down the braid's (wandering) center axis with
+  // its own tiny tremor — cradled between the two, passing under every
+  // crossing — and nestles behind the medallion, inside the heart.
+  let child: ThreadGeom | undefined;
+  if (content.childId) {
+    const placedChild = layout.placed.find(
+      (p) => p.milestone.id === content.childId,
+    );
+    if (placedChild) {
+      const scale = cfg.widthPx / 1000;
+      const tremor = smoothNoise1d(cfg.seed ^ 0xbab7, 460);
+      const yStart = placedChild.y;
+      const yEnd = knot.medallion.y - 12;
+      const pts: Pt[] = [];
+      for (let y = yStart; y < yEnd; y += 7) {
+        const fadeIn = Math.min(1, (y - yStart) / 170);
+        pts.push({
+          x: braid.centerAt(y) + 3.5 * scale * tremor(y - yStart) * fadeIn,
+          y,
+        });
+      }
+      pts.push({ x: knot.medallion.x, y: yEnd });
+      const polyline = new Polyline(pts);
+      child = {
+        polyline,
+        monotoneIdx: pts.length - 1,
+        // no knot section — the tail-fade window is the last 120px so the
+        // little thread also finishes sewn snug under the medallion
+        knotStartLen: Math.max(0, polyline.totalLen - 120),
+        knotEndY: yEnd,
+      };
+    }
+  }
 
   // ── Crossing patches: braid (§5.4) ──
   // At crossing k the over thread is redrawn locally over a flax gap stroke.
@@ -202,6 +242,7 @@ export function buildTapestryGeometry(
     layout,
     her,
     him,
+    child,
     patches,
     anchors,
     nearMisses,
