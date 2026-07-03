@@ -29,8 +29,13 @@
   /* ---- Typography ---- */
   --font-display: 'Fraunces', 'Fraunces-fallback', georgia, serif;
   --font-body: 'Crimson Pro', 'CrimsonPro-fallback', georgia, serif;
+  /* the couple's names only — falls back to the stitched-serif look */
+  --font-script: 'Mr De Haviland', 'Fraunces', 'Fraunces-fallback', georgia,
+    serif;
 
-  --size-names: clamp(3rem, 8vw, 6.5rem);
+  /* script faces carry tall swashes and a small x-height — the names run
+     larger than the old serif scale to hold the same visual weight */
+  --size-names: clamp(4.2rem, 11vw, 9rem);
   --size-title: 1.6rem;
   --size-body: 1.05rem;
   --leading-body: 1.65;

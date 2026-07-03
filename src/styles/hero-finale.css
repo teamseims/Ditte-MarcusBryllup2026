@@ -1,10 +1,10 @@
 /* Hero and finale (§4, §9). */
 
-/* ── stitched display lettering ── */
+/* ── display lettering: signature script for the names ── */
 .stitched-names {
   width: 100%;
   font-size: var(--size-names);
-  font-weight: 480;
+  font-weight: 400; /* the script has a single weight — never synthesize */
   line-height: 1.15;
 }
 
@@ -16,9 +16,10 @@
 }
 
 .stitched-names text {
-  font-family: var(--font-display);
+  font-family: var(--font-script);
   font-optical-sizing: auto;
   font-size: 1em;
+  letter-spacing: normal; /* tracking would break the script's joins */
   text-anchor: middle;
   dominant-baseline: central;
 }
@@ -27,8 +28,12 @@
   fill: var(--ink);
 }
 
-/* the embroidery: a fine dashed gilt overlay stroke */
+/* The dashed gilt overlay stroke was tuned for Fraunces' sturdy serifs;
+   on a delicate connected script it reads as noise, so it stays off.
+   Simon: if you revert --font-script to a serif, delete the `display:
+   none` below to bring the stitched-lettering effect back. */
 .stitched-over {
+  display: none;
   fill: none;
   stroke: var(--gilt);
   stroke-width: 1;
@@ -39,12 +44,6 @@
 
 .stitched-amp {
   fill: var(--gilt);
-  font-style: italic;
-  font-weight: 340;
-}
-
-.stitched-over .stitched-amp {
-  fill: none;
 }
 
 /* ── hero hem + dangling threads scroll cue ── */

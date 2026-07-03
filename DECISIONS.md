@@ -131,6 +131,24 @@ every reload — and stays inside the §5.6 test bounds:
   x-positions and the story threads start on their lanes at the body top,
   so cue and tapestry read as the same thread passing through the fabric.
 
+## Names typeface
+
+The owner asked for Adobe's **Mr Keningbeck Pro** for the couple's names.
+Adobe Fonts cannot be self-hosted (CDN embed tied to an active
+subscription), which would break §2's flaky-venue-Wi-Fi rule for the
+kiosk. We ship **Mr De Haviland** instead — same designer (Sudtipos), same
+Bluemlein penmanship collection, OFL-licensed on Google Fonts, self-hosted
+like the other faces (17 KB, Danish æøå verified). Consequences:
+
+- `--font-script` token holds the face; it falls back to Fraunces, i.e.
+  the previous stitched-serif look, if it ever fails to load.
+- The dashed gilt overlay ("stitched lettering") is disabled for the
+  names — it was tuned for Fraunces' sturdy serifs and reads as noise on a
+  delicate connected script. Reverting `--font-script` to a serif and
+  removing one `display: none` in hero-finale.css restores it.
+- `--size-names` grew (script x-height is small); letter-spacing is pinned
+  to normal so the joins never break; weight pinned to the single 400.
+
 ## Kiosk
 
 - `?attract=N` (seconds) previews the attract loop without waiting 75s —
