@@ -49,7 +49,9 @@ export const DESKTOP_CONFIG: Omit<GeometryConfig, 'widthPx'> = {
   meanderAmpMax: 90,
   anchorJitter: 25,
   braidAmpStart: 90,
-  braidAmpEnd: 22,
+  /* the braid tightens until the threads nearly touch just before the
+     heart opens (owner's sketch) */
+  braidAmpEnd: 10,
   crossingSpacing: 232,
   nearMissGapMin: 40,
   nearMissGapMax: 60,
@@ -72,7 +74,7 @@ export const MOBILE_CONFIG: Omit<GeometryConfig, 'widthPx'> = {
   meanderAmpMax: 54,
   anchorJitter: 15,
   braidAmpStart: 70,
-  braidAmpEnd: 18,
+  braidAmpEnd: 14,
   topPad: 300,
   preSpacing: 560,
   bottomPad: 220,

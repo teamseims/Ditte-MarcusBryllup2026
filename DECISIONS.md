@@ -159,16 +159,25 @@ would make deep anchor links feel sluggish instead.
 
 ## The heart finale (supersedes the overhand-knot design)
 
-Owner direction: the finale should be "a real heart shape, organic and
-smooth". The hand-designed knot is now a ribbon heart: the threads cross
-at the neck (the heart's notch), rise into lobes that bulge above the
-notch — that bulge is what makes it read as a heart rather than a shield —
-sweep wide in the upper third, taper long to the point, cross again there,
-and the tails weave once through the sides and tuck up behind the
-medallion, which sits like a gem in the heart's upper middle. Four
-numerically-found crossings, over/under alternating, same gap-stroke
-technique. The first attempt (widest point too low, no lobe bulge) read as
-a leaf; documented so nobody regresses to it.
+Owner direction, iterated twice and finally locked to the owner's pen
+sketch: the braid tightens until the threads nearly touch
+(braidAmpEnd 22 → 10 desktop, 18 → 14 mobile), then they part at the
+notch WITHOUT crossing — each thread draws its own full round lobe —
+sweep wide in the upper third, taper long, and meet again in a single
+crossover at the point whose splayed round-cap tips form the heart's tip.
+No tails, no tuck: one clean closed heart, the medallion like a gem in
+its upper middle, the child's thread ending behind it. Exactly one
+numerically-found crossing (asserted: more means a lobe grazed the other
+thread — the pretzel regression). Two earlier attempts are documented so
+nobody resurrects them: v1 read as a leaf (widest too low, no lobe
+bulge); v2 (neck crossing + woven tails) read as tied ribbon but not as
+the sketch's heart.
+
+While verifying: a dash artifact was found and fixed — with
+`dasharray = pathLength` and `dashoffset = length` (a fully un-revealed
+stroke), the SECOND dash period starts exactly at the path's end and
+round caps render a phantom ~7px dot there. All reveal strokes now use
+`dasharray = "L L+50"` so the second period can never reach the end.
 
 ## The child's thread (content.childId)
 

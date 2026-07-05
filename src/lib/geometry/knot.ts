@@ -16,42 +16,44 @@ import { sampleCentripetal2d, type Pt } from './spline';
  */
 
 /** Design control points, relative to the medallion center, desktop scale.
- *  HER enters from the right (the braid ends with her at +A_end), descends
- *  to the neck crossing, then rises up-and-out into the LEFT lobe — the
- *  bulge above the notch is what makes it read as a true heart — sweeps
- *  wide, tapers long to the point, and the tail tucks up behind the
- *  medallion, which sits like a gem in the heart's upper middle. */
+ *  Per the owner's sketch: the tightened braid arrives with the threads
+ *  nearly touching, they part at the notch WITHOUT crossing — each thread
+ *  draws its own full, round lobe — sweep wide, taper long, and meet again
+ *  at the point with a tiny crossover whose splayed tips form the heart's
+ *  tip. No tails, no tuck: one clean closed heart, the medallion like a
+ *  gem in its upper middle.
+ *
+ *  HER enters from the right (the braid ends with her at +A_end) and draws
+ *  the RIGHT half; HIM mirrors on the left. */
 const HER_DESIGN: Pt[] = [
-  { x: 14, y: -195 }, // easing in from the braid
-  { x: 2, y: -150 }, // neck crossing — the heart's notch
-  { x: -30, y: -172 }, // rising into the lobe
-  { x: -62, y: -180 }, // lobe top, above the notch
-  { x: -98, y: -140 },
-  { x: -112, y: -75 }, // widest, upper third
-  { x: -82, y: 10 },
-  { x: -40, y: 82 }, // long taper
-  { x: 4, y: 148 }, // the heart's point — second crossing
-  { x: 34, y: 96 }, // tail rises inside the heart
-  { x: 12, y: 44 }, // tucked behind the medallion
+  { x: 10, y: -200 }, // easing in from the tightened braid
+  { x: 3, y: -162 }, // the notch — threads all but touch, then part
+  { x: 38, y: -196 }, // rising into the lobe, above the notch
+  { x: 70, y: -190 }, // lobe top
+  { x: 104, y: -148 },
+  { x: 116, y: -80 }, // widest, upper third
+  { x: 94, y: 0 },
+  { x: 50, y: 84 }, // long taper
+  { x: 12, y: 132 },
+  { x: -10, y: 160 }, // through the point — the crossover makes the tip
 ];
 
 /**
  * No hand ties a mirror-perfect heart: HIS side is the mirror of HER_DESIGN
- * plus these small hand offsets. Kept subtle at the neck and the point
- * (steep, topology-critical crossings) and along the lobes.
+ * plus these small hand offsets. Kept subtle at the notch and the point
+ * (topology-critical) and freer along the lobes.
  */
 const HIM_WOBBLE: Pt[] = [
   { x: 2, y: -3 },
-  { x: 1, y: -2 }, // neck
+  { x: 1, y: -2 }, // notch
   { x: 0, y: 4 },
   { x: -3, y: 3 }, // lobe top — a touch lower than hers
   { x: 2, y: -4 },
   { x: 0, y: -4 }, // widest
   { x: -2, y: 3 },
   { x: 0, y: 2 },
+  { x: 1, y: 2 },
   { x: 0, y: -1 }, // the point — near-mirror
-  { x: 1, y: 2 }, // tails
-  { x: 0, y: 1 },
 ];
 
 export interface KnotCrossing {
@@ -98,7 +100,7 @@ export function buildKnot(
     her: sampleCentripetal2d(herWay, 22),
     him: sampleCentripetal2d(himWay, 22),
     medallion: { x: xc, y: cy, r: cfg.medallionR },
-    endY: cy + 158 * k,
+    endY: cy + 168 * k,
   };
 }
 

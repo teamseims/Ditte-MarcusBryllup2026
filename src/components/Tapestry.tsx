@@ -131,7 +131,7 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
             data-layer="reveal"
             transform={`translate(${off * 0.8} ${off * 0.8})`}
             strokeWidth={w.childShadow}
-            strokeDasharray={child.polyline.totalLen}
+            strokeDasharray={`${child.polyline.totalLen} ${child.polyline.totalLen + 50}`}
           />
           <use
             href="#thread-child"
@@ -139,7 +139,7 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
             data-thread="child"
             data-layer="reveal"
             strokeWidth={w.childCore}
-            strokeDasharray={child.polyline.totalLen}
+            strokeDasharray={`${child.polyline.totalLen} ${child.polyline.totalLen + 50}`}
           />
           <g clipPath="url(#tail-clip-child)">
             <use
@@ -179,7 +179,7 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
             data-layer="reveal"
             transform={`translate(${off} ${off})`}
             strokeWidth={w.shadow}
-            strokeDasharray={len}
+            strokeDasharray={`${len} ${len + 50}`}
           />
           <use
             href={`#thread-${key}`}
@@ -187,7 +187,7 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
             data-thread={key}
             data-layer="reveal"
             strokeWidth={w.core}
-            strokeDasharray={len}
+            strokeDasharray={`${len} ${len + 50}`}
           />
           {/* the freshest stitches: discrete running stitches (dash pattern
               pinned to the path, so they never crawl) revealed only inside
@@ -223,7 +223,7 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
               data-start={p.startLen}
               data-len={p.len}
               strokeWidth={gapW}
-              strokeDasharray={p.len}
+              strokeDasharray={`${p.len} ${p.len + 50}`}
               pathLength={p.len}
             />
             <path
@@ -235,7 +235,7 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
               data-len={p.len}
               transform={`translate(${off} ${off})`}
               strokeWidth={w.shadow}
-              strokeDasharray={p.len}
+              strokeDasharray={`${p.len} ${p.len + 50}`}
               pathLength={p.len}
             />
             <path
@@ -246,7 +246,7 @@ export function Tapestry({ geometry, fiberFx = false }: TapestryProps) {
               data-start={p.startLen}
               data-len={p.len}
               strokeWidth={w.core}
-              strokeDasharray={p.len}
+              strokeDasharray={`${p.len} ${p.len + 50}`}
               pathLength={p.len}
             />
             <g clipPath="url(#tip-clip)">

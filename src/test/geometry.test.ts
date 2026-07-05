@@ -170,14 +170,16 @@ describe('anchors (§5.6)', () => {
   });
 });
 
-describe('the knot (§5.5)', () => {
-  it('has 3–5 self-crossings with alternating over/under patches', () => {
+describe('the heart finale (§5.5, owner sketch)', () => {
+  it('has exactly one self-crossing — the crossover at the point', () => {
+    // The threads part at the notch WITHOUT crossing (each draws its own
+    // lobe) and meet again only at the heart's point. More crossings here
+    // means a lobe grazed the other thread — a regression to the pretzel.
     const knotPatches = g.patches.slice(g.braidCrossingYs.length);
-    expect(knotPatches.length).toBeGreaterThanOrEqual(3);
-    expect(knotPatches.length).toBeLessThanOrEqual(5);
-    for (let i = 1; i < knotPatches.length; i++) {
-      expect(knotPatches[i].over).not.toBe(knotPatches[i - 1].over);
-    }
+    expect(knotPatches.length).toBe(1);
+    // the tip sits below the medallion, near the center axis
+    expect(Math.abs(knotPatches[0].x - g.medallion.x)).toBeLessThan(15);
+    expect(knotPatches[0].y).toBeGreaterThan(g.medallion.y + 100);
   });
 
   it('knot crossings pair up roughly across the two threads', () => {
