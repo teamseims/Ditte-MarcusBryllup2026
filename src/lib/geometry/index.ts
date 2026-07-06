@@ -192,7 +192,9 @@ export function buildTapestryGeometry(
   const knotCrossings = findKnotCrossings(knot.her, knot.him);
   const firstKnotOver =
     overThreadAtCrossing(braid.crossings.length) === 'her' ? 'him' : 'her';
-  const knotWin = 30 * (cfg.knotEntryRise / 240);
+  // quieter breaks at the heart's two crossings: the white interruptions
+  // must not compete with the silhouette
+  const knotWin = 18 * (cfg.knotEntryRise / 240);
   knotCrossings.forEach((c, i) => {
     const overKey =
       i % 2 === 0

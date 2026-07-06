@@ -159,20 +159,30 @@ would make deep anchor links feel sluggish instead.
 
 ## The heart finale (supersedes the overhand-knot design)
 
-Owner direction, iterated to a final form: the braid tightens until the
-threads nearly touch (braidAmpEnd 22 → 10 desktop, 18 → 14 mobile), the
-threads CROSS at the notch and each sweeps out the OPPOSITE half — her
-madder arrives from the right and draws the LEFT lobe, his woad the
-RIGHT (explicit owner request) — big round lobes bulging above the
-notch, width ≈ 0.9 × height, a shortish taper, and a second crossover at
-the point whose splayed round-cap tips form the tip. No tails, no tuck.
-The medallion sits like a gem in the heart's upper middle, the child's
-thread ends behind it. Exactly TWO numerically-found crossings, asserted
-along with the side-swap itself (her left of center at lobe height, him
-right). Earlier attempts documented so nobody resurrects them: v1 read
-as a leaf (widest too low, no lobe bulge); v2 (neck crossing + woven
-tails) read as tied ribbon; v3 (no notch crossing, own-side lobes) was
-per the first sketch reading but superseded by the side-swap request.
+Owner direction, iterated to a final form: the silhouette is a TRUE
+parametric heart (x = 16 sin³t, y = 13 cos t − 5 cos 2t − 2 cos 3t −
+cos 4t), densely sampled and split at the notch and point. The braid
+tightens until the threads nearly touch (braidAmpEnd 22 → 10 desktop,
+18 → 14 mobile), the threads CROSS at the notch cusp and each sweeps the
+OPPOSITE half — her madder arrives from the right and draws the LEFT
+lobe, his woad the RIGHT (explicit owner request) — and they cross back
+at the point, each tip continuing ~13px along its own tangent like two
+pen strokes finishing a drawn heart. The heart is EXACTLY mirror-
+symmetric: the organic wobble that helps threads elsewhere read as
+lopsided on an icon this hard-wired, so it is off here (the handmade
+feel lives in the thread texture layers). The medallion hangs at the
+notch like a pendant clasp; the child's thread disappears behind it
+there. Crossing windows halved at the heart (18 vs 30) so the white
+over/under breaks don't compete with the silhouette. Exactly TWO
+numerically-found crossings, asserted along with the side-swap and the
+mirror symmetry itself.
+
+Earlier hand-drawn attempts documented so nobody resurrects them: v1
+(Catmull waypoints) read as a leaf; v2 (neck crossing + woven tails)
+read as tied ribbon; v3 (no notch crossing) and v4 (side-swapped
+waypoints) still read subtly wonky — hand-guessed control points carry
+curvature errors the eye catches instantly on a symbol. The parametric
+curve ended the iteration.
 
 While verifying: a dash artifact was found and fixed — with
 `dasharray = pathLength` and `dashoffset = length` (a fully un-revealed

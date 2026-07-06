@@ -172,34 +172,41 @@ describe('anchors (§5.6)', () => {
 
 describe('the heart finale (§5.5, owner sketch)', () => {
   it('has exactly two self-crossings — the notch and the point', () => {
-    // The threads CROSS at the notch (each draws the opposite half) and
-    // cross back at the point. Any other count means a lobe grazed the
+    // The threads CROSS at the notch cusp (each draws the opposite half)
+    // and cross back at the point. Any other count means a lobe grazed the
     // other thread — a regression to the pretzel.
     const knotPatches = g.patches.slice(g.braidCrossingYs.length);
     expect(knotPatches.length).toBe(2);
     const [notch, point] = [...knotPatches].sort((a, b) => a.y - b.y);
     expect(Math.abs(notch.x - g.medallion.x)).toBeLessThan(15);
-    expect(notch.y).toBeLessThan(g.medallion.y - 120);
+    expect(notch.y).toBeLessThan(g.medallion.y - 40);
     expect(Math.abs(point.x - g.medallion.x)).toBeLessThan(15);
-    expect(point.y).toBeGreaterThan(g.medallion.y + 80);
+    expect(point.y).toBeGreaterThan(g.medallion.y + 150);
     expect(notch.over).not.toBe(point.over);
   });
 
-  it('the right thread draws the left half and vice versa', () => {
-    // HER arrives on the right of the braid; past the notch she must be on
-    // the LEFT side of the heart (owner direction).
+  it('the right thread draws the left half and vice versa, mirror-exact', () => {
+    // HER arrives on the right of the braid; past the notch she must sweep
+    // the LEFT lobe (owner direction). The heart itself is exactly
+    // symmetric — the handmade feel lives in the thread texture, not
+    // warped geometry.
     const xc = g.medallion.x;
-    const yLobe = g.medallion.y - 100; // widest region
-    const herPts = g.her.polyline.pts.filter(
-      (p) => Math.abs(p.y - yLobe) < 10 && p.len > g.her.knotStartLen,
-    );
-    const himPts = g.him.polyline.pts.filter(
-      (p) => Math.abs(p.y - yLobe) < 10 && p.len > g.him.knotStartLen,
-    );
-    expect(herPts.length).toBeGreaterThan(0);
-    expect(himPts.length).toBeGreaterThan(0);
-    for (const p of herPts) expect(p.x).toBeLessThan(xc);
-    for (const p of himPts) expect(p.x).toBeGreaterThan(xc);
+    const yLobe = g.medallion.y - 80; // through the lobes
+    const heartPts = (t: typeof g.her) =>
+      t.polyline.pts.filter(
+        (p) => Math.abs(p.y - yLobe) < 8 && p.len > t.knotStartLen,
+      );
+    const herX = heartPts(g.her).map((p) => p.x);
+    const himX = heartPts(g.him).map((p) => p.x);
+    expect(herX.length).toBeGreaterThan(0);
+    expect(himX.length).toBeGreaterThan(0);
+    // her reaches far LEFT, him far RIGHT
+    expect(Math.min(...herX)).toBeLessThan(xc - 100);
+    expect(Math.max(...himX)).toBeGreaterThan(xc + 100);
+    // exact mirror: her leftmost and him rightmost match within 2px
+    expect(
+      Math.abs(xc - Math.min(...herX) - (Math.max(...himX) - xc)),
+    ).toBeLessThan(2);
   });
 
   it('knot crossings pair up roughly across the two threads', () => {

@@ -80,7 +80,7 @@ export function MilestoneLayer({
             {anchor.isWedding ? (
               <div
                 className={`wedding-cue chip ${inked ? 'is-inked' : 'is-ghost'}`}
-                style={{ left: anchor.x, top: anchor.y + 192 }}
+                style={{ left: anchor.x, top: anchor.y + 252 }}
               >
                 {strings.seeImages}
               </div>

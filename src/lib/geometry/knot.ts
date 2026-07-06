@@ -1,61 +1,35 @@
 import type { GeometryConfig } from './config';
-import { sampleCentripetal2d, type Pt } from './spline';
+import type { Pt } from './spline';
 
 /**
- * The knot (§5.5) — hand-designed, not generated. Both threads arrive from
- * the braid, cross at the neck, and tie into a HEART around the gilt
- * medallion (owner direction: "a real heart shape, organic and smooth"):
- * HER sweeps out the left lobe and down to the point, HIM mirrors on the
- * right; they cross once at the neck and once at the heart's point, and
- * the tails tuck up behind the medallion, inside the heart.
+ * The heart finale (§5.5, final form — see DECISIONS.md for the journey).
  *
- * The waypoints below are fixed control points parameterized by the
- * medallion center and a single scale factor (mobile shrinks the heart
- * with the medallion). Two self-crossings result — found numerically and
- * rendered with the same over/under gap-stroke technique as the braid.
+ * The silhouette is a TRUE parametric heart (the classic closed curve
+ * x = 16·sin³t, y = 13·cos t − 5·cos 2t − 2·cos 3t − cos 4t), sampled
+ * densely — continuous curvature, soft round notch, clean point. Hand-drawn
+ * control points kept reading "wonky" on a shape this iconic; the curve is
+ * exact and the heart is exactly mirror-symmetric (the handmade feel lives
+ * in the thread's texture layers, not warped geometry).
+ *
+ * The threads swap sides (owner direction): HER arrives from the right of
+ * the tightened braid, crosses at the notch, and draws the LEFT half; HIM
+ * mirrors. Both halves meet at the point, where each tip continues ~13px
+ * along its own tangent — a small crossover like two pen strokes finishing
+ * a drawn heart. Two crossings total: notch and point.
  */
 
-/** Design control points, relative to the medallion center, desktop scale.
- *  Owner direction: a full classic heart, and the threads swap sides —
- *  the tightened braid arrives, the threads CROSS at the notch, and each
- *  sweeps out the OPPOSITE half: big round lobes bulging above the notch,
- *  widest in the upper third (width ≈ 0.9 × height), a shortish taper,
- *  and a second crossover at the point whose splayed tips form the tip.
- *  Two crossings total: notch and point. The medallion sits like a gem in
- *  the heart's upper middle.
- *
- *  HER enters from the right (the braid ends with her at +A_end), crosses
- *  at the notch, and draws the LEFT half; HIM mirrors. */
-const HER_DESIGN: Pt[] = [
-  { x: 8, y: -205 }, // easing in from the tightened braid
-  { x: -6, y: -168 }, // through the notch crossing, to the left side
-  { x: -38, y: -196 }, // rising into the lobe, above the notch
-  { x: -72, y: -216 }, // lobe top
-  { x: -120, y: -188 },
-  { x: -158, y: -100 }, // widest, upper third
-  { x: -122, y: -5 },
-  { x: -62, y: 66 }, // taper
-  { x: 8, y: 124 }, // through the point — crossing back to the right
-  { x: 26, y: 148 }, // splayed tip
-];
+/** vertical scale of the heart (px per curve unit at k = 1) */
+const SY = 12;
+/** horizontal scale — slightly compressed for ❤-like width/height ≈ 1 */
+const SX = 10.8;
+/** vertical shift so the medallion sits in the heart's upper middle */
+const CY_SHIFT = 3;
+/** tip overshoot past the point, along the outline tangent */
+const TIP = 13;
 
-/**
- * No hand ties a mirror-perfect heart: HIS side is the mirror of HER_DESIGN
- * plus these small hand offsets. Kept subtle at the notch and the point
- * (topology-critical) and freer along the lobes.
- */
-const HIM_WOBBLE: Pt[] = [
-  { x: 2, y: -3 },
-  { x: 1, y: -2 }, // notch crossing — near-mirror, topology-critical
-  { x: 0, y: 4 },
-  { x: -3, y: 4 }, // lobe top — a touch lower than hers
-  { x: 2, y: -4 },
-  { x: 0, y: -5 }, // widest
-  { x: -2, y: 3 },
-  { x: 0, y: 2 },
-  { x: 0, y: -1 }, // the point — near-mirror
-  { x: 1, y: 2 }, // tip splay
-];
+const heartX = (t: number) => 16 * Math.pow(Math.sin(t), 3);
+const heartY = (t: number) =>
+  13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
 
 export interface KnotCrossing {
   x: number;
@@ -68,7 +42,7 @@ export interface KnotGeometry {
   her: Pt[];
   him: Pt[];
   medallion: { x: number; y: number; r: number };
-  /** document y at which the knot is considered fully drawn */
+  /** document y at which the heart is considered fully drawn */
   endY: number;
 }
 
@@ -81,27 +55,51 @@ export function buildKnot(
   const k = cfg.knotEntryRise / 240; // heart scale rides on the config rise
   const cy = yBraidEnd + cfg.knotEntryRise;
 
-  const mirror = (p: Pt, sign: 1 | -1): Pt => ({
+  // Left half of the heart, notch → point (t: 2π → π), in medallion-
+  // relative design coordinates (SVG y grows downward).
+  const N = 220;
+  const leftHalf: Pt[] = [];
+  for (let i = 0; i <= N; i++) {
+    const t = 2 * Math.PI - (Math.PI * i) / N;
+    leftHalf.push({
+      x: heartX(t) * SX,
+      y: -heartY(t) * SY + CY_SHIFT,
+    });
+  }
+  // tip overshoot along the end tangent — the drawn-crossover at the point
+  const a = leftHalf[leftHalf.length - 2];
+  const b = leftHalf[leftHalf.length - 1];
+  const m = Math.hypot(b.x - a.x, b.y - a.y);
+  leftHalf.push({
+    x: b.x + ((b.x - a.x) / m) * TIP,
+    y: b.y + ((b.y - a.y) / m) * TIP,
+  });
+
+  const notchY = leftHalf[0].y; // curve start = the notch cusp
+
+  const place = (p: Pt, sign: 1 | -1): Pt => ({
     x: xc + sign * p.x * k,
     y: cy + p.y * k,
   });
 
-  const herWay: Pt[] = [
+  // HER: from the braid's right edge, converging in and crossing at the
+  // notch cusp to draw the LEFT half. HIM exactly mirrors.
+  const her: Pt[] = [
     { x: xc + braidEndAmp, y: yBraidEnd },
-    ...HER_DESIGN.map((p) => mirror(p, 1)),
+    { x: xc + 6 * k, y: cy + (notchY - 95) * k },
+    ...leftHalf.map((p) => place(p, 1)),
   ];
-  const himWay: Pt[] = [
+  const him: Pt[] = [
     { x: xc - braidEndAmp, y: yBraidEnd },
-    ...HER_DESIGN.map((p, i) =>
-      mirror({ x: p.x + HIM_WOBBLE[i].x, y: p.y + HIM_WOBBLE[i].y }, -1),
-    ),
+    { x: xc - 6 * k, y: cy + (notchY - 95) * k },
+    ...leftHalf.map((p) => place(p, -1)),
   ];
 
   return {
-    her: sampleCentripetal2d(herWay, 22),
-    him: sampleCentripetal2d(himWay, 22),
+    her,
+    him,
     medallion: { x: xc, y: cy, r: cfg.medallionR },
-    endY: cy + 156 * k,
+    endY: cy + (17 * SY + CY_SHIFT + TIP + 2) * k,
   };
 }
 
