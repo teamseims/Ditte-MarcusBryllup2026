@@ -16,26 +16,27 @@ import { sampleCentripetal2d, type Pt } from './spline';
  */
 
 /** Design control points, relative to the medallion center, desktop scale.
- *  Per the owner's sketch: the tightened braid arrives with the threads
- *  nearly touching, they part at the notch WITHOUT crossing — each thread
- *  draws its own full, round lobe — sweep wide, taper long, and meet again
- *  at the point with a tiny crossover whose splayed tips form the heart's
- *  tip. No tails, no tuck: one clean closed heart, the medallion like a
- *  gem in its upper middle.
+ *  Owner direction: a full classic heart, and the threads swap sides —
+ *  the tightened braid arrives, the threads CROSS at the notch, and each
+ *  sweeps out the OPPOSITE half: big round lobes bulging above the notch,
+ *  widest in the upper third (width ≈ 0.9 × height), a shortish taper,
+ *  and a second crossover at the point whose splayed tips form the tip.
+ *  Two crossings total: notch and point. The medallion sits like a gem in
+ *  the heart's upper middle.
  *
- *  HER enters from the right (the braid ends with her at +A_end) and draws
- *  the RIGHT half; HIM mirrors on the left. */
+ *  HER enters from the right (the braid ends with her at +A_end), crosses
+ *  at the notch, and draws the LEFT half; HIM mirrors. */
 const HER_DESIGN: Pt[] = [
-  { x: 10, y: -200 }, // easing in from the tightened braid
-  { x: 3, y: -162 }, // the notch — threads all but touch, then part
-  { x: 38, y: -196 }, // rising into the lobe, above the notch
-  { x: 70, y: -190 }, // lobe top
-  { x: 104, y: -148 },
-  { x: 116, y: -80 }, // widest, upper third
-  { x: 94, y: 0 },
-  { x: 50, y: 84 }, // long taper
-  { x: 12, y: 132 },
-  { x: -10, y: 160 }, // through the point — the crossover makes the tip
+  { x: 8, y: -205 }, // easing in from the tightened braid
+  { x: -6, y: -168 }, // through the notch crossing, to the left side
+  { x: -38, y: -196 }, // rising into the lobe, above the notch
+  { x: -72, y: -216 }, // lobe top
+  { x: -120, y: -188 },
+  { x: -158, y: -100 }, // widest, upper third
+  { x: -122, y: -5 },
+  { x: -62, y: 66 }, // taper
+  { x: 8, y: 124 }, // through the point — crossing back to the right
+  { x: 26, y: 148 }, // splayed tip
 ];
 
 /**
@@ -45,15 +46,15 @@ const HER_DESIGN: Pt[] = [
  */
 const HIM_WOBBLE: Pt[] = [
   { x: 2, y: -3 },
-  { x: 1, y: -2 }, // notch
+  { x: 1, y: -2 }, // notch crossing — near-mirror, topology-critical
   { x: 0, y: 4 },
-  { x: -3, y: 3 }, // lobe top — a touch lower than hers
+  { x: -3, y: 4 }, // lobe top — a touch lower than hers
   { x: 2, y: -4 },
-  { x: 0, y: -4 }, // widest
+  { x: 0, y: -5 }, // widest
   { x: -2, y: 3 },
   { x: 0, y: 2 },
-  { x: 1, y: 2 },
   { x: 0, y: -1 }, // the point — near-mirror
+  { x: 1, y: 2 }, // tip splay
 ];
 
 export interface KnotCrossing {
@@ -100,7 +101,7 @@ export function buildKnot(
     her: sampleCentripetal2d(herWay, 22),
     him: sampleCentripetal2d(himWay, 22),
     medallion: { x: xc, y: cy, r: cfg.medallionR },
-    endY: cy + 168 * k,
+    endY: cy + 156 * k,
   };
 }
 

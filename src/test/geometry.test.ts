@@ -171,15 +171,35 @@ describe('anchors (§5.6)', () => {
 });
 
 describe('the heart finale (§5.5, owner sketch)', () => {
-  it('has exactly one self-crossing — the crossover at the point', () => {
-    // The threads part at the notch WITHOUT crossing (each draws its own
-    // lobe) and meet again only at the heart's point. More crossings here
-    // means a lobe grazed the other thread — a regression to the pretzel.
+  it('has exactly two self-crossings — the notch and the point', () => {
+    // The threads CROSS at the notch (each draws the opposite half) and
+    // cross back at the point. Any other count means a lobe grazed the
+    // other thread — a regression to the pretzel.
     const knotPatches = g.patches.slice(g.braidCrossingYs.length);
-    expect(knotPatches.length).toBe(1);
-    // the tip sits below the medallion, near the center axis
-    expect(Math.abs(knotPatches[0].x - g.medallion.x)).toBeLessThan(15);
-    expect(knotPatches[0].y).toBeGreaterThan(g.medallion.y + 100);
+    expect(knotPatches.length).toBe(2);
+    const [notch, point] = [...knotPatches].sort((a, b) => a.y - b.y);
+    expect(Math.abs(notch.x - g.medallion.x)).toBeLessThan(15);
+    expect(notch.y).toBeLessThan(g.medallion.y - 120);
+    expect(Math.abs(point.x - g.medallion.x)).toBeLessThan(15);
+    expect(point.y).toBeGreaterThan(g.medallion.y + 80);
+    expect(notch.over).not.toBe(point.over);
+  });
+
+  it('the right thread draws the left half and vice versa', () => {
+    // HER arrives on the right of the braid; past the notch she must be on
+    // the LEFT side of the heart (owner direction).
+    const xc = g.medallion.x;
+    const yLobe = g.medallion.y - 100; // widest region
+    const herPts = g.her.polyline.pts.filter(
+      (p) => Math.abs(p.y - yLobe) < 10 && p.len > g.her.knotStartLen,
+    );
+    const himPts = g.him.polyline.pts.filter(
+      (p) => Math.abs(p.y - yLobe) < 10 && p.len > g.him.knotStartLen,
+    );
+    expect(herPts.length).toBeGreaterThan(0);
+    expect(himPts.length).toBeGreaterThan(0);
+    for (const p of herPts) expect(p.x).toBeLessThan(xc);
+    for (const p of himPts) expect(p.x).toBeGreaterThan(xc);
   });
 
   it('knot crossings pair up roughly across the two threads', () => {

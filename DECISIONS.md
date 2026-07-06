@@ -159,19 +159,20 @@ would make deep anchor links feel sluggish instead.
 
 ## The heart finale (supersedes the overhand-knot design)
 
-Owner direction, iterated twice and finally locked to the owner's pen
-sketch: the braid tightens until the threads nearly touch
-(braidAmpEnd 22 → 10 desktop, 18 → 14 mobile), then they part at the
-notch WITHOUT crossing — each thread draws its own full round lobe —
-sweep wide in the upper third, taper long, and meet again in a single
-crossover at the point whose splayed round-cap tips form the heart's tip.
-No tails, no tuck: one clean closed heart, the medallion like a gem in
-its upper middle, the child's thread ending behind it. Exactly one
-numerically-found crossing (asserted: more means a lobe grazed the other
-thread — the pretzel regression). Two earlier attempts are documented so
-nobody resurrects them: v1 read as a leaf (widest too low, no lobe
-bulge); v2 (neck crossing + woven tails) read as tied ribbon but not as
-the sketch's heart.
+Owner direction, iterated to a final form: the braid tightens until the
+threads nearly touch (braidAmpEnd 22 → 10 desktop, 18 → 14 mobile), the
+threads CROSS at the notch and each sweeps out the OPPOSITE half — her
+madder arrives from the right and draws the LEFT lobe, his woad the
+RIGHT (explicit owner request) — big round lobes bulging above the
+notch, width ≈ 0.9 × height, a shortish taper, and a second crossover at
+the point whose splayed round-cap tips form the tip. No tails, no tuck.
+The medallion sits like a gem in the heart's upper middle, the child's
+thread ends behind it. Exactly TWO numerically-found crossings, asserted
+along with the side-swap itself (her left of center at lobe height, him
+right). Earlier attempts documented so nobody resurrects them: v1 read
+as a leaf (widest too low, no lobe bulge); v2 (neck crossing + woven
+tails) read as tied ribbon; v3 (no notch crossing, own-side lobes) was
+per the first sketch reading but superseded by the side-swap request.
 
 While verifying: a dash artifact was found and fixed — with
 `dasharray = pathLength` and `dashoffset = length` (a fully un-revealed
