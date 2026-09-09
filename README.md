@@ -56,7 +56,7 @@ fake content can't sneak into the real event.
 
 ### 2. Photos — `public/images/<milestone-id>/`
 
-Drop 5–10 images per milestone into its folder and list them in the
+Drop up to 10 images per milestone into its folder and list them in the
 milestone's `gallery`. Export discipline (the code never resizes):
 
 - **1600px** long edge
@@ -64,6 +64,21 @@ milestone's `gallery`. Export discipline (the code never resizes):
 
 Captions are optional; they double as alt text. Delete the generated
 `.svg` placeholders once real photos are in.
+
+**No photos for a moment?** Leave `gallery: []`. That milestone then opens
+a **story card** instead of a gallery — its emblem stitched large on the
+linen with the date, title and story. This is the intended treatment for
+anything from before phones had cameras, and it reads as deliberate rather
+than as a gap. Both placeholder births ship this way so you can see it.
+
+A note on balance: keep the two threads similar *in kind*. If his early
+years are words, let hers be words too, and let the photographs begin on
+both threads where photographs actually began. One side full of galleries
+beside a side with none is the only version of this that looks like a
+shortage.
+
+> ⚠️ **Never run `npm run placeholders` after adding real photos** — it
+> deletes and regenerates everything under `public/images/`.
 
 ### 3. `src/data/strings.ts` — UI text
 

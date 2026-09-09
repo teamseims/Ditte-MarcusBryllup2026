@@ -7,6 +7,9 @@ export interface UiStrings {
   scrollCue: string;
   close: string;
   seeImages: string;
+  /** affordance on a milestone with no photos — opens the story card */
+  readMore: string;
+  storyLabel: (title: string) => string;
   imageCounter: (n: number, total: number) => string;
   imageAlt: (title: string, n: number) => string;
   previousImage: string;
@@ -23,6 +26,8 @@ const da: UiStrings = {
   scrollCue: 'Rul for at begynde',
   close: 'Luk',
   seeImages: 'Se billeder',
+  readMore: 'Læs mere',
+  storyLabel: (title) => `Fortælling: ${title}`,
   imageCounter: (n, total) => `${n} / ${total}`,
   imageAlt: (title, n) => `${title} — billede ${n}`,
   previousImage: 'Forrige billede',
@@ -40,6 +45,8 @@ const en: UiStrings = {
   scrollCue: 'Scroll to begin',
   close: 'Close',
   seeImages: 'See photos',
+  readMore: 'Read more',
+  storyLabel: (title) => `Story: ${title}`,
   imageCounter: (n, total) => `${n} / ${total}`,
   imageAlt: (title, n) => `${title} — photo ${n}`,
   previousImage: 'Previous photo',

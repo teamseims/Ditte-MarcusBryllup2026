@@ -17,6 +17,15 @@ describe('shipped placeholder content', () => {
     expect(hasPlaceholderContent(content)).toBe(true);
   });
 
+  it('ships both births as text-only story cards', () => {
+    // the photo line: nothing before phones had cameras, on both threads
+    for (const id of ['her-01-foedsel', 'him-01-foedsel']) {
+      const m = content.milestones.find((x) => x.id === id)!;
+      expect(m.gallery).toHaveLength(0);
+      expect(m.longText).toBeTruthy();
+    }
+  });
+
   it('ships equal her/him milestone counts (8 + 8)', () => {
     const her = content.milestones.filter((m) => m.track === 'her');
     const him = content.milestones.filter((m) => m.track === 'him');
@@ -56,17 +65,23 @@ describe('validateContent catches broken fixtures', () => {
     expect(() => validateContent(c)).toThrow(/efter mødet/);
   });
 
-  it('rejects galleries with fewer than 5 images', () => {
+  it('accepts a gallery with no images (text-only story card)', () => {
     const c = clone();
-    find(c, 'moedet').gallery = find(c, 'moedet').gallery.slice(0, 3);
-    expect(() => validateContent(c)).toThrow(/5–10/);
+    find(c, 'moedet').gallery = [];
+    expect(() => validateContent(c)).not.toThrow();
+  });
+
+  it('accepts a gallery with a single image', () => {
+    const c = clone();
+    find(c, 'moedet').gallery = find(c, 'moedet').gallery.slice(0, 1);
+    expect(() => validateContent(c)).not.toThrow();
   });
 
   it('rejects galleries with more than 10 images', () => {
     const c = clone();
     const g = find(c, 'moedet').gallery;
     find(c, 'moedet').gallery = [...g, ...g];
-    expect(() => validateContent(c)).toThrow(/5–10/);
+    expect(() => validateContent(c)).toThrow(/højst være 10/);
   });
 
   it('rejects duplicate ids', () => {

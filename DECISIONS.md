@@ -210,6 +210,34 @@ behind the medallion, inside the heart. Choices:
 - Omitting `childId` removes the thread, the emblem variant, and all of
   its DOM — validated (must be a shared milestone, not meeting/wedding).
 
+## Milestones without photos (the story card)
+
+Late change, days before the wedding: the couple could not source early
+photographs of the groom, and neither of them has much from before phones
+had cameras. The original 5–10-images-per-gallery rule made that
+unexpressible — the site refused to start.
+
+Galleries are now **0–10**. A milestone with no photos opens a *story
+card* instead of the viewer: its emblem stitched large on an opaque linen
+page with a dashed gilt edge, above the date, title and story. Choices:
+
+- **A page, not a transparent overlay.** The first attempt reused the
+  gallery's 92%-opacity scrim; with no photograph filling the stage, the
+  tapestry and the milestone's own card bled through the words and it
+  read as broken. The opaque stitched page fixes that and matches the
+  frame language already used everywhere else.
+- **Every marker still opens something.** Simplest mental model for
+  whoever fills in the content, and guests tapping a marker that does
+  nothing feels like a fault.
+- **The card affordance never over-promises**: "Se billeder →" with
+  photos, "Læs mere →" when there is only a longer story, and no
+  affordance line at all when the card already holds everything (the
+  marker still opens its story card for the keepsake view).
+- **Tap zones and the n/N counter hide below two photos**, so a
+  single-image gallery has nothing to page through.
+- Both placeholder births ship as story cards, so the treatment is
+  visible in the demo and the "photo line" idea is self-documenting.
+
 ## Names typeface
 
 The owner asked for Adobe's **Mr Keningbeck Pro** for the couple's names.

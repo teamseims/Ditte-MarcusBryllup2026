@@ -107,9 +107,12 @@ export function validateContent(content: SiteContent): void {
   // 3. Galleries and ids.
   const seenIds = new Set<string>();
   for (const m of milestones) {
-    if (m.gallery.length < 5 || m.gallery.length > 10) {
+    // 0 billeder er tilladt: milepælen bliver et "fortællekort" (§8) —
+    // ingen billeder, kun emblemet og teksten. Alt derover er 1–10.
+    if (m.gallery.length > 10) {
       problems.push(
-        `Galleriet for '${m.id}' har ${m.gallery.length} billeder — der skal være 5–10.`,
+        `Galleriet for '${m.id}' har ${m.gallery.length} billeder — der må højst være 10. ` +
+          `(0 er fint: så bliver milepælen et fortællekort uden billeder.)`,
       );
     }
     if (!KEBAB_CASE.test(m.id)) {

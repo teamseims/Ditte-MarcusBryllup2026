@@ -15,12 +15,24 @@
  *     on the tapestry; `dateLabel` is free display text ('Forår 1994' is
  *     fine — no parsing happens).
  *
- *  3. Photos: for each milestone, drop 5–10 images into
+ *  3. Photos: for each milestone, drop up to 10 images into
  *     `public/images/<milestone-id>/` and list them in `gallery` below.
  *     Export discipline (the code never resizes — it trusts you):
  *       • 1600px long edge
  *       • ~72% JPEG quality  (≈ 250–400 KB per image)
  *     Captions are optional; when present they double as alt text.
+ *
+ *     NO PHOTOS FOR A MOMENT? Leave `gallery: []`. The milestone then
+ *     opens a "story card" — its emblem stitched large on the linen with
+ *     the date, title and story — instead of a gallery. This is the
+ *     intended treatment for everything before phones had cameras, and it
+ *     reads as deliberate. Two of the placeholder births below are set up
+ *     that way so you can see it. Aim to keep the two threads similar in
+ *     kind: if his early years are words, let hers be words too, and let
+ *     the photographs begin on both threads where photographs began.
+ *
+ *     WARNING: never run `npm run placeholders` after adding real photos —
+ *     it wipes and regenerates all of public/images/.
  *
  *  4. `id` must be kebab-case (a-z, 0-9, hyphens), unique, and STABLE:
  *     it names the image folder and the deep link (#milestone-id).
@@ -57,11 +69,20 @@ export interface Milestone {
   track: Track;
   year: number; // drives vertical ordering
   dateLabel: string; // display string, free text
-  title: string; // short, e.g. 'Ida kommer til verden'
+  title: string; // short, e.g. 'Ditte kommer til verden'
   text: string; // 1–3 sentences shown in the card
   longText?: string; // optional extra paragraph inside the gallery modal
   icon: IconName;
-  gallery: GalleryImage[]; // 5–10 images
+  /**
+   * 0–10 images.
+   *   1–10 → tapping the marker opens the photo gallery.
+   *   0    → tapping opens a "story card" instead: the milestone's emblem
+   *          stitched large on the linen with the date, title and story.
+   *          Use this for anything nobody photographed — most of childhood
+   *          for anyone born before phones had cameras. It is a deliberate
+   *          treatment, not a gap.
+   */
+  gallery: GalleryImage[];
 }
 
 export interface NearMiss {
@@ -110,10 +131,12 @@ export const content: SiteContent = {
       track: 'her',
       year: 1994,
       dateLabel: 'Forår 1994',
-      title: '[PLACEHOLDER] Ida kommer til verden',
+      title: '[PLACEHOLDER] Ditte kommer til verden',
       text: '[PLACEHOLDER] En forårsmorgen begynder en rosenrød tråd sin vej gennem vævningen.',
+      longText:
+        '[PLACEHOLDER] Her kan historien om hendes allerførste tid stå — stedet, årstiden, hvem der ventede. Denne milepæl har med vilje ingen billeder: den åbner som et fortællekort.',
       icon: 'flower',
-      gallery: gallery('her-01-foedsel', 5),
+      gallery: [], // text-only story card — see the note at the top of the file
     },
     {
       id: 'her-02-skolestart',
@@ -194,10 +217,12 @@ export const content: SiteContent = {
       track: 'him',
       year: 1992,
       dateLabel: 'Vinter 1992',
-      title: '[PLACEHOLDER] Jonas kommer til verden',
+      title: '[PLACEHOLDER] Marcus kommer til verden',
       text: '[PLACEHOLDER] En vinternat begynder en indigoblå tråd sin vej gennem vævningen.',
+      longText:
+        '[PLACEHOLDER] Her kan historien om hans allerførste tid stå — stedet, årstiden, hvem der ventede. Denne milepæl har med vilje ingen billeder: den åbner som et fortællekort.',
       icon: 'star',
-      gallery: gallery('him-01-foedsel', 5),
+      gallery: [], // text-only story card — see the note at the top of the file
     },
     {
       id: 'him-02-foerste-fodboldkamp',

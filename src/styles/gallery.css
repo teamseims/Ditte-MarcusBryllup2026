@@ -147,6 +147,84 @@
   color: var(--ink-soft);
 }
 
+/* ── story card: a milestone with no photos (§8) ──
+   Not a gap — its own page: the stitched emblem set large on the linen
+   above the date, title and story. */
+.story-emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(38vw, 186px);
+  aspect-ratio: 1;
+  margin: 0.2rem auto 0.9rem;
+  color: var(--gilt-deep);
+}
+
+.story-emblem-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.story-emblem-ring circle {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.story-emblem-ring .ring-outer {
+  stroke: var(--gilt);
+  stroke-width: 1.4;
+  stroke-dasharray: 2 6;
+  opacity: 0.9;
+}
+
+.story-emblem-ring .ring-inner {
+  stroke: var(--gilt-deep);
+  stroke-width: 0.7;
+  opacity: 0.4;
+}
+
+/* the emblem itself, stitched */
+.story-emblem > svg:not(.story-emblem-ring) {
+  stroke-dasharray: 4 2.4;
+  opacity: 0.92;
+}
+
+/* The story card is a page laid on the fabric: opaque linen with a
+   stitched edge, so the tapestry behind never shows through the words.
+   Always one centred column, even on wide screens. */
+.gallery-dialog.is-story {
+  width: min(40em, 92vw);
+  max-width: 40em;
+  text-align: center;
+  padding: 2.4rem 2.2rem 2rem;
+  background-color: var(--flax);
+  background-image: repeating-linear-gradient(
+      0deg,
+      var(--weave-line) 0 1px,
+      transparent 1px 2px
+    ),
+    repeating-linear-gradient(90deg, var(--weave-line) 0 1px, transparent 1px 2px);
+  border: 1.6px dashed var(--gilt);
+  border-radius: 10px;
+  box-shadow: 0 14px 44px rgba(51, 38, 27, 0.12);
+}
+
+/* on its own page the ✕ belongs inside the stitched edge */
+.gallery-dialog.is-story .gallery-close {
+  top: 2px;
+  right: 2px;
+}
+
+.gallery-dialog.is-story .gallery-words {
+  text-align: center;
+}
+
+.gallery-dialog.is-story .gallery-text {
+  font-size: calc(var(--size-body) * 1.08);
+}
+
 /* wide screens: words move beside the image (§8) */
 @media (min-width: 1100px) and (min-aspect-ratio: 4/3) {
   .gallery-dialog {
@@ -167,6 +245,12 @@
   .gallery-words {
     grid-area: words;
     text-align: left;
+  }
+
+  /* the story card keeps its single centred column */
+  .gallery-dialog.is-story {
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -189,6 +273,15 @@
   .gallery-caption,
   .gallery-words {
     padding: 0 20px;
+  }
+
+  /* the story card keeps real edges on a phone */
+  .gallery-dialog.is-story {
+    width: calc(100vw - 32px);
+    padding: 1.8rem 1.4rem 1.5rem;
+  }
+  .gallery-dialog.is-story .gallery-words {
+    padding: 0;
   }
 }
 

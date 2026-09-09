@@ -82,7 +82,9 @@ export function MilestoneLayer({
                 className={`wedding-cue chip ${inked ? 'is-inked' : 'is-ghost'}`}
                 style={{ left: anchor.x, top: anchor.y + 252 }}
               >
-                {strings.seeImages}
+                {milestone.gallery.length > 0
+                  ? strings.seeImages
+                  : strings.readMore}
               </div>
             ) : (
               <MilestoneCard
@@ -189,7 +191,14 @@ function MilestoneCard({
       <p className="chip card-date">{milestone.dateLabel}</p>
       <h3 className="card-title">{milestone.title}</h3>
       <p className="card-text">{milestone.text}</p>
-      <p className="card-more chip">{strings.seeImages} →</p>
+      {/* Only promise what's actually behind the tap: photos if there are
+          any, otherwise the longer story — and nothing at all when the card
+          already holds everything (the marker still opens its story card). */}
+      {milestone.gallery.length > 0 ? (
+        <p className="card-more chip">{strings.seeImages} →</p>
+      ) : milestone.longText ? (
+        <p className="card-more chip">{strings.readMore} →</p>
+      ) : null}
     </div>
   );
 }
