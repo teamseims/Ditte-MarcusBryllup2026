@@ -190,8 +190,19 @@
   color: var(--ink-soft);
 }
 
-.card-date {
-  opacity: 0.85;
+/* Each date is written in the colour of the thread it belongs to:
+   Ditte's rose, Marcus' blue, and — for everything they did together —
+   Carl's heather, the blend of the two. */
+.card-her .card-date {
+  color: var(--madder-ink);
+}
+
+.card-him .card-date {
+  color: var(--woad);
+}
+
+.card-shared .card-date {
+  color: var(--heather);
 }
 
 .card-more {
@@ -241,6 +252,7 @@
 }
 
 .wedding-cue {
+  color: var(--heather);
   position: absolute;
   transform: translateX(-50%);
   cursor: pointer;
@@ -251,7 +263,7 @@
    side-tinted by their track color via the hairline rule ── */
 @media (max-width: 719px) {
   .card {
-    background: rgba(231, 220, 195, 0.92); /* --flax, weave shows through */
+    background: var(--flax-veil); /* weave shows through */
     padding: 12px 16px 8px;
     text-align: left;
   }
@@ -262,7 +274,7 @@
     border-top-color: var(--woad);
   }
   .card-shared {
-    border-top-color: var(--gilt);
+    border-top-color: var(--heather);
   }
   .card-title {
     font-size: calc(var(--size-title) * 0.92);

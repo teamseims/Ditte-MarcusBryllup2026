@@ -34,10 +34,28 @@
   --gilt-deep: #2531c0;
   --gilt-light: #7c86f5;
 
+  /* Ditte's thread colour darkened just enough to pass contrast as small
+     type on the blush ground (the thread itself is 3.9:1 there, under the
+     4.5:1 minimum). Blue and heather already pass at full strength. */
+  --madder-ink: #a8443a;
+
   /* Carl's thread: a blend of the two parent dyes */
   --heather: #754ca0;
   --heather-deep: #4b3169;
   --heather-light: #a186c4;
+
+  /* the ground at 92%, for panels laid over the cloth (mobile cards) */
+  --flax-veil: rgba(249, 237, 231, 0.92);
+
+  /* soft shadow under a page laid on the cloth, and the glow behind the
+     heart — both derived from the palette, not invented */
+  --page-shadow: rgba(60, 60, 70, 0.12);
+  --glow-warm: rgba(47, 63, 238, 0.07);
+  --glow-warm-faint: rgba(47, 63, 238, 0.03);
+
+  /* the light falling off toward the edges of the cloth */
+  --vignette-mid: rgba(187, 90, 78, 0.05);
+  --vignette-edge: rgba(136, 58, 48, 0.1);
 
   /* Convenience mixes (still derived from the palette above) */
   --ink-soft: #7c7c84; /* their warm grey body copy */

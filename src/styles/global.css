@@ -76,8 +76,8 @@ img {
   background: radial-gradient(
     120% 85% at 48.5% 41%,
     transparent 62%,
-    rgba(196, 116, 107, 0.05) 86%,
-    rgba(143, 79, 72, 0.1) 100%
+    var(--vignette-mid) 86%,
+    var(--vignette-edge) 100%
   );
 }
 

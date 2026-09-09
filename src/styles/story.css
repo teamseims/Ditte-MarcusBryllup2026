@@ -7,7 +7,7 @@
   display: grid;
   place-items: center;
   padding: 16px;
-  background-color: rgba(231, 220, 195, 0.92); /* --flax at 92% */
+  background-color: var(--flax-veil);
   background-image: repeating-linear-gradient(
       0deg,
       var(--weave-line) 0 1px,
@@ -42,7 +42,7 @@
     repeating-linear-gradient(90deg, var(--weave-line) 0 1px, transparent 1px 2px);
   border: 1.6px dashed var(--gilt);
   border-radius: 10px;
-  box-shadow: 0 14px 44px rgba(51, 38, 27, 0.12);
+  box-shadow: 0 14px 44px var(--page-shadow);
 }
 
 .story-close {
