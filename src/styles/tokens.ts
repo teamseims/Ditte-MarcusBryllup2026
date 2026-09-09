@@ -4,21 +4,21 @@
  */
 
 export const COLORS = {
-  flax: '#e7dcc3',
-  flaxDeep: '#d9cbaa',
-  madder: '#a64d5f',
-  madderDeep: '#6c323e',
-  madderLight: '#c8828f',
-  woad: '#3d5a6c',
-  woadDeep: '#283b47',
-  woadLight: '#6c8c9e',
-  gilt: '#b8892e',
-  giltDeep: '#8a6620',
-  giltLight: '#d4a94f',
-  heather: '#775365',
-  heatherDeep: '#513845',
-  heatherLight: '#a9918f',
-  ink: '#33261b',
+  flax: '#f9ede7',
+  flaxDeep: '#eedcd4',
+  madder: '#bb5a4e',
+  madderDeep: '#883a30',
+  madderLight: '#d68d81',
+  woad: '#2f3fee',
+  woadDeep: '#1c259e',
+  woadLight: '#7c86f5',
+  gilt: '#2f3fee',
+  giltDeep: '#2531c0',
+  giltLight: '#7c86f5',
+  heather: '#754ca0',
+  heatherDeep: '#4b3169',
+  heatherLight: '#a186c4',
+  ink: '#3c3c46',
 } as const;
 
 /** Embroidery stroke stack widths in px (§6). Mobile subtracts 1.5 (§11). */

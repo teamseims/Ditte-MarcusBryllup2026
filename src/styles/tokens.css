@@ -1,52 +1,66 @@
 /*
  * Design tokens (§2) — the ONLY place raw colors may appear.
- * Simon: retheme the wedding here. The same values are mirrored for the SVG
- * thread code in src/styles/tokens.ts — keep the two files in sync.
+ *
+ * The palette matches the couple's wedding site,
+ * kærlighedpåklippeøen.com: a pale blush ground, one signature electric
+ * blue carrying every accent and all the hand-drawn line art, warm grey
+ * body copy, and a dusty rose used for buttons. Their identity is
+ * essentially two colours on blush, so the tapestry's old madder / woad /
+ * gilt scheme maps onto it rather than sitting beside it:
+ *
+ *   ground  → their blush
+ *   MARCUS  → their electric blue (the signature colour)
+ *   DITTE   → their button rose, deepened until it reads as thread
+ *   accents → the same blue, as on their site
+ *
+ * Simon: retheme the wedding here. The same values are mirrored for the
+ * SVG thread code in src/styles/tokens.ts — keep the two files in sync.
  */
 
 :root {
-  /* ---- Palette: historical dye names, tapestry logic ---- */
-  --flax: #e7dcc3; /* fabric ground (linen) */
-  --flax-deep: #d9cbaa; /* weave shadow / vignette edge */
-  --madder: #a64d5f; /* HER thread (madder rose) */
-  --woad: #3d5a6c; /* HIS thread (woad indigo) */
-  --gilt: #b8892e; /* shared accents, stitched frame, finale */
-  --ink: #33261b; /* text (warm sepia ink) */
+  /* ---- Palette ---- */
+  --flax: #f9ede7; /* blush ground */
+  --flax-deep: #eedcd4; /* vignette edge / weave shadow */
+  --madder: #bb5a4e; /* DITTE's thread — their rose, deepened */
+  --woad: #2f3fee; /* MARCUS' thread — their signature blue */
+  --gilt: #2f3fee; /* accents, frame, medallion — blue, as on their site */
+  --ink: #3c3c46; /* headings: their charcoal */
 
   /* Derived thread variants: -deep = shadow stitch, -light = sheen stitch */
-  --madder-deep: #6c323e;
-  --madder-light: #c8828f;
-  --woad-deep: #283b47;
-  --woad-light: #6c8c9e;
-  --gilt-deep: #8a6620;
-  --gilt-light: #d4a94f;
+  --madder-deep: #883a30;
+  --madder-light: #d68d81;
+  --woad-deep: #1c259e;
+  --woad-light: #7c86f5;
+  --gilt-deep: #2531c0;
+  --gilt-light: #7c86f5;
 
-  /* THE CHILD's thread (childId in content.ts): a blend of madder and woad
-     — heather, born of both dyes */
-  --heather: #775365;
-  --heather-deep: #513845;
-  --heather-light: #a9918f;
+  /* Carl's thread: a blend of the two parent dyes */
+  --heather: #754ca0;
+  --heather-deep: #4b3169;
+  --heather-light: #a186c4;
 
   /* Convenience mixes (still derived from the palette above) */
-  --ink-soft: rgba(51, 38, 27, 0.72);
-  --ink-faint: rgba(51, 38, 27, 0.4);
-  --weave-line: rgba(51, 38, 27, 0.04);
+  --ink-soft: #7c7c84; /* their warm grey body copy */
+  --ink-faint: rgba(60, 60, 70, 0.42);
+  --weave-line: rgba(60, 60, 70, 0.022); /* their ground is nearly flat */
 
   /* ---- Typography ---- */
-  --font-display: 'Fraunces', 'Fraunces-fallback', georgia, serif;
+  /* their headings: light geometric caps, very wide tracking */
+  --font-display: 'Jost', 'Fraunces-fallback', system-ui, sans-serif;
+  /* their body and sub-headings: an italic serif */
   --font-body: 'Crimson Pro', 'CrimsonPro-fallback', georgia, serif;
-  /* the couple's names only — falls back to the stitched-serif look */
-  --font-script: 'Mr De Haviland', 'Fraunces', 'Fraunces-fallback', georgia,
-    serif;
+  /* the couple's names — their site uses the display caps, not a script.
+     Point this at 'Mr De Haviland' to bring the script back. */
+  --font-script: 'Jost', 'Fraunces-fallback', system-ui, sans-serif;
 
-  /* script faces carry tall swashes and a small x-height — the names run
-     larger than the old serif scale to hold the same visual weight */
-  --size-names: clamp(4.2rem, 11vw, 9rem);
-  --size-title: 1.6rem;
+  --size-names: clamp(2.1rem, 5.2vw, 4rem);
+  /* the wide letterspacing is the loudest part of their identity */
+  --track-names: 0.34em;
+  --size-title: 1.5rem;
   --size-body: 1.05rem;
-  --leading-body: 1.65;
-  --size-chip: 0.78rem;
-  --track-chip: 0.12em;
+  --leading-body: 1.7;
+  --size-chip: 0.74rem;
+  --track-chip: 0.2em;
 
   /* ---- Chrome ---- */
   --frame-inset: 12px;
@@ -56,7 +70,7 @@
 /* Kiosk mode: slightly larger type and hit targets (§10) */
 html.kiosk {
   --kiosk-scale: 1.15;
-  --size-title: 1.84rem;
+  --size-title: 1.72rem;
   --size-body: 1.2rem;
-  --size-chip: 0.9rem;
+  --size-chip: 0.86rem;
 }

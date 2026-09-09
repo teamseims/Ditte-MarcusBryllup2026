@@ -12,7 +12,8 @@
 }
 
 .qr-page .stitched-names {
-  font-size: clamp(3.4rem, 8.5vw, 5.6rem);
+  /* the wide tracking makes the caps far wider than the old script */
+  font-size: clamp(1.5rem, 4.6vw, 2.6rem);
 }
 
 .qr-frame {

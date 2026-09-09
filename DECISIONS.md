@@ -210,6 +210,47 @@ behind the medallion, inside the heart. Choices:
 - Omitting `childId` removes the thread, the emblem variant, and all of
   its DOM — validated (must be a shared milestone, not meeting/wedding).
 
+## Matching the couple's wedding site
+
+Late direction: match the visual identity of kærlighedpåklippeøen.com.
+Their identity is essentially **two colours on blush** — a pale warm
+ground, one vivid electric blue carrying every accent, sub-heading and
+hand-drawn line illustration, warm grey body copy, and a dusty rose used
+for buttons — with headings set as light geometric caps under very wide
+tracking, and sub-headings and intros in an italic serif.
+
+The mapping, rather than a wholesale replacement:
+
+- **ground** → their blush (`#f9ede7`)
+- **Marcus' thread** → their signature blue (`#2f3fee`)
+- **Ditte's thread** → their button rose, deepened to `#bb5a4e`. The first
+  attempt used their button colour nearly as-is and it lost badly to a
+  colour as saturated as that blue — one person's thread visibly fainter
+  than the other's is not a neutral choice on a page about two people.
+- **every accent** (frame, chips, medallion, sprigs, focus ring) → the
+  same blue, exactly as they use it. This means Marcus' thread and the
+  chrome share a colour; they read apart because the threads are thick
+  woven strokes and the chrome is thin dashed line.
+- **Carl's thread** stays the blend of his parents' two dyes, which in the
+  new palette lands on a dusty violet.
+- **texture**: their ground is flat, so the aged-linen noise and dye
+  layers are gone and the weave survives only as a whisper. The
+  candlelight vignette is much lighter.
+- **display face** → Jost, the closest open Futura-like to their light
+  geometric caps, self-hosted like the rest. Body copy stays Crimson Pro,
+  whose italic is already close to their serif.
+
+What deliberately did NOT change: the embroidery structure — layered
+shadow/core/sheen strokes, the over/under weave, the stitch animation.
+Their hand-drawn blue line art and a woven thread are the same idea (a
+made-by-hand line on a soft ground), so the tapestry reads as theirs
+without becoming a copy of their page.
+
+**The script is gone from the names.** Their site has no script face
+anywhere; the names are now light caps with their wide tracking. The
+Mr De Haviland file and the `--font-script` token remain, so pointing
+that token back at the script is a one-line revert.
+
 ## No photographs at all (final direction)
 
 Days before the wedding the owner cut photography entirely: gathering and

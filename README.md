@@ -1,9 +1,10 @@
 # The Wedding Tapestry · Vævningen
 
-A one-page, scroll-driven wedding site: two embroidered threads — hers in
-madder rose, his in woad indigo — run down a linen tapestry from their
-births, meet in a single tangent kiss, braid together through shared
-milestones, and close into a heart around a gilt medallion at the wedding.
+A one-page, scroll-driven wedding site: two embroidered threads — hers a
+deep rose, his the electric blue from their wedding site — run down the
+cloth from their births, meet in a single tangent kiss, braid together
+through their shared years, and close into a heart around a medallion at
+the wedding.
 
 It is a **text** tapestry: no photographs anywhere. Each milestone is a
 marker on the thread with a card beside it — date, title, a sentence or
@@ -86,6 +87,12 @@ bottom of the file.
 All colors live in `src/styles/tokens.css` (with a TS mirror in
 `src/styles/tokens.ts` for the SVG code — keep the two in sync). Nothing
 else in the codebase contains a raw color.
+
+The palette currently matches the couple's wedding site,
+kærlighedpåklippeøen.com: blush ground, their electric blue on Marcus'
+thread and every accent, a deepened version of their button rose on
+Ditte's. Display type is Jost (their light geometric caps); body is
+Crimson Pro. See `DECISIONS.md` for how the mapping was chosen.
 
 ## Repository tour
 

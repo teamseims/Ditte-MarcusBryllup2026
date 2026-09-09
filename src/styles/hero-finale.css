@@ -1,11 +1,14 @@
 /* Hero and finale (§4, §9). */
 
-/* ── display lettering: signature script for the names ── */
+/* ── display lettering ──
+   Their site sets every heading as light geometric caps with very wide
+   tracking; the names follow suit. (Point --font-script back at
+   'Mr De Haviland' in tokens.css to restore the script.) */
 .stitched-names {
   width: 100%;
   font-size: var(--size-names);
-  font-weight: 400; /* the script has a single weight — never synthesize */
-  line-height: 1.15;
+  font-weight: 300;
+  line-height: 1.4;
 }
 
 .stitched-names svg {
@@ -19,7 +22,9 @@
   font-family: var(--font-script);
   font-optical-sizing: auto;
   font-size: 1em;
-  letter-spacing: normal; /* tracking would break the script's joins */
+  font-weight: 300;
+  letter-spacing: var(--track-names);
+  text-transform: uppercase;
   text-anchor: middle;
   dominant-baseline: central;
 }
@@ -44,6 +49,18 @@
 
 .stitched-amp {
   fill: var(--gilt);
+  font-weight: 300;
+}
+
+/* SVG text cannot wrap, so on narrow screens the tracking has to give
+   before the names run off the cloth. */
+@media (max-width: 719px) {
+  .stitched-names {
+    font-size: clamp(1.15rem, 5.4vw, 2rem);
+  }
+  .stitched-names text {
+    letter-spacing: 0.2em;
+  }
 }
 
 /* ── hero hem + dangling threads scroll cue ── */
