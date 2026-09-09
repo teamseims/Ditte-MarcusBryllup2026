@@ -58,24 +58,30 @@
   --vignette-edge: rgba(136, 58, 48, 0.1);
 
   /* Convenience mixes (still derived from the palette above) */
-  --ink-soft: #7c7c84; /* their warm grey body copy */
+  /* A Didone's hairlines are far thinner than the old serif's, so the
+     body grey had to come down from #7c7c84 (3.6:1 on this ground) to
+     something that survives a kiosk seen from a metre away. */
+  --ink-soft: #5f5f68;
   --ink-faint: rgba(60, 60, 70, 0.42);
   --weave-line: rgba(60, 60, 70, 0.022); /* their ground is nearly flat */
 
   /* ---- Typography ---- */
   /* their headings: light geometric caps, very wide tracking */
   --font-display: 'Jost', 'Fraunces-fallback', system-ui, sans-serif;
-  /* their body and sub-headings: an italic serif */
-  --font-body: 'Crimson Pro', 'CrimsonPro-fallback', georgia, serif;
+  /* their body and sub-headings: Didot, matched with Bodoni Moda.
+     A Didone's hairlines are fragile at small sizes, so the body runs a
+     little larger and looser than it did with the old low-contrast serif. */
+  --font-body: 'Bodoni Moda', 'Bodoni-fallback', didot, georgia, serif;
   /* the couple's names — their site uses the display caps, not a script.
-     Point this at 'Mr De Haviland' to bring the script back. */
+     The Mr De Haviland file is still in /public/fonts, so pointing this
+     at 'Mr De Haviland' brings the calligraphy back in one line. */
   --font-script: 'Jost', 'Fraunces-fallback', system-ui, sans-serif;
 
   --size-names: clamp(2.1rem, 5.2vw, 4rem);
   /* the wide letterspacing is the loudest part of their identity */
   --track-names: 0.34em;
   --size-title: 1.5rem;
-  --size-body: 1.05rem;
+  --size-body: 1.1rem;
   --leading-body: 1.7;
   --size-chip: 0.74rem;
   --track-chip: 0.2em;

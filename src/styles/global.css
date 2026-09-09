@@ -20,6 +20,9 @@ html {
 
 body {
   font-family: var(--font-body);
+  /* let the variable font pick a smaller optical size at text sizes, which
+     thickens the hairlines where they would otherwise break up */
+  font-optical-sizing: auto;
   font-size: var(--size-body);
   line-height: var(--leading-body);
   color: var(--ink);
