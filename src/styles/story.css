@@ -99,8 +99,9 @@
 }
 
 .story-title {
+  font-family: var(--font-body);
   font-size: calc(var(--size-title) * 1.05);
-  font-weight: 520;
+  font-weight: 560;
   margin: 4px 0 8px;
 }
 

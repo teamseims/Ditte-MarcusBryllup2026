@@ -166,11 +166,24 @@
   animation: marker-pulse 1.6s ease 2;
 }
 
-/* ── cards: quiet ink on fabric, hairline gilt top rule (§8) ── */
+/* ── cards: quiet ink on fabric, hairline top rule (§8) ── */
 .card {
   position: absolute;
   padding: 14px 4px 6px;
-  border-top: 1px solid var(--gilt);
+  border-top: 1px solid var(--heather);
+}
+
+/* the rule matches the date beneath it, thread for thread */
+.card-her {
+  border-top-color: var(--madder-ink);
+}
+
+.card-him {
+  border-top-color: var(--woad);
+}
+
+.card-shared {
+  border-top-color: var(--heather);
 }
 
 .card-left {
@@ -178,8 +191,11 @@
 }
 
 .card-title {
+  /* the milestone's own words, so it takes the text face rather than the
+     display caps used for the couple's names */
+  font-family: var(--font-body);
   font-size: var(--size-title);
-  font-weight: 520;
+  font-weight: 560;
   margin: 6px 0 4px;
   color: var(--ink);
 }
@@ -266,15 +282,6 @@
     background: var(--flax-veil); /* weave shows through */
     padding: 12px 16px 8px;
     text-align: left;
-  }
-  .card-her {
-    border-top-color: var(--madder);
-  }
-  .card-him {
-    border-top-color: var(--woad);
-  }
-  .card-shared {
-    border-top-color: var(--heather);
   }
   .card-title {
     font-size: calc(var(--size-title) * 0.92);
