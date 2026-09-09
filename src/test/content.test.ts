@@ -37,6 +37,15 @@ describe('shipped placeholder content', () => {
     expect(him.every((m) => m.title.includes('[PLACEHOLDER]'))).toBe(true);
   });
 
+  it('ships the two Roskilde near-misses, both before the meeting', () => {
+    const meeting = content.milestones.find((m) => m.id === content.meetingId)!;
+    expect(content.nearMisses.map((n) => n.year)).toEqual([2012, 2019]);
+    for (const nm of content.nearMisses) {
+      expect(nm.year).toBeLessThan(meeting.year);
+      expect(nm.label).toContain('Roskilde');
+    }
+  });
+
   it("has Ditte's real dates where the table supplied them", () => {
     const byId = new Map(content.milestones.map((m) => [m.id, m]));
     expect(byId.get('ditte-01-foedsel')!.dateLabel).toBe('14. marts 1994');
@@ -113,6 +122,13 @@ describe('validateContent catches broken fixtures', () => {
     const c = clone();
     c.childId = 'ditte-13-paedagogik';
     expect(() => validateContent(c)).toThrow(/'shared'/);
+  });
+
+  it('rejects a near-miss at or after the meeting', () => {
+    const c = clone();
+    // they cannot have "almost met" after they met
+    c.nearMisses = [{ year: 2099, label: 'umuligt' }];
+    expect(() => validateContent(c)).toThrow(/nærkontakt/i);
   });
 
   it('accepts content without a childId', () => {

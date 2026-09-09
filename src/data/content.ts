@@ -362,8 +362,10 @@ export const content: SiteContent = {
     {
       id: 'moedet-frederiksberg',
       track: 'shared',
-      year: 2018,
-      dateLabel: '[PLACEHOLDER] ca. 2018',
+      // Skal ligge EFTER Roskilde 2019 (se nearMisses nederst) — de var
+      // begge der og mødtes ikke. Ret til det rigtige år.
+      year: 2020,
+      dateLabel: '[PLACEHOLDER] ca. 2020',
       title: 'En gåtur i Frederiksberg Have',
       text: 'En gåtur gennem haven — og to tråde, der ikke slap hinanden igen.',
       longText:
@@ -448,10 +450,10 @@ export const content: SiteContent = {
   ],
 
   // Øjeblikke hvor trådene var tæt på hinanden uden at mødes (0–3).
-  // UDFYLD ELLER SLET disse to — de er ren placeholder.
+  // Begge år skal ligge før mødet — det er hele pointen.
   nearMisses: [
-    { year: 2013, label: '[PLACEHOLDER] Samme festival — mødtes aldrig' },
-    { year: 2016, label: '[PLACEHOLDER] Samme café, en time imellem' },
+    { year: 2012, label: 'Roskilde Festival — samme plads, mødtes aldrig' },
+    { year: 2019, label: 'Roskilde igen — og stadig ikke hinanden' },
   ],
 
   meetingId: 'moedet-frederiksberg',

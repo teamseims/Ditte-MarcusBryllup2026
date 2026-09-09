@@ -94,6 +94,20 @@ export function validateContent(content: SiteContent): void {
     }
   }
 
+  // 2a. Near-misses are moments the threads ALMOST touched — they only
+  //     mean anything before the two actually met.
+  if (meeting) {
+    for (const nm of content.nearMisses) {
+      if (nm.year >= meeting.year) {
+        problems.push(
+          `Nærkontakten '${nm.label}' (${nm.year}) ligger samtidig med eller efter mødet (${meeting.year}). ` +
+            `En nærkontakt er et øjeblik hvor de var tæt på hinanden UDEN at mødes, så året skal ligge før mødet. ` +
+            `Ret enten årstallet eller mødets år.`,
+        );
+      }
+    }
+  }
+
   // 2b. The child milestone, if declared.
   if (content.childId !== undefined) {
     const child = milestones.find((m) => m.id === content.childId);

@@ -215,14 +215,21 @@
   color: var(--ink-soft);
   text-align: center;
   width: max-content;
-  max-width: 240px;
+  max-width: 210px;
   pointer-events: none;
-  /* flax halo so the whisper stays readable where it crosses the threads */
+  /* A proper halo: the whisper is narrower than the gap it names, so it
+     inevitably lies across a thread. Ringing it in ground colour lets the
+     thread read as passing cleanly behind the words. */
   text-shadow:
-    0 0 8px var(--flax),
-    0 0 5px var(--flax),
     0 0 3px var(--flax),
-    0 0 2px var(--flax);
+    0 0 3px var(--flax),
+    0 0 6px var(--flax),
+    0 0 6px var(--flax),
+    0 0 10px var(--flax),
+    2px 0 4px var(--flax),
+    -2px 0 4px var(--flax),
+    0 2px 4px var(--flax),
+    0 -2px 4px var(--flax);
 }
 .nearmiss-label.is-ghost {
   opacity: 0;
