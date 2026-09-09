@@ -157,7 +157,14 @@ export function validateContent(content: SiteContent): void {
 export function hasPlaceholderContent(content: SiteContent): boolean {
   const texts: (string | undefined)[] = [
     content.heroLine,
-    ...content.milestones.flatMap((m) => [m.title, m.text, m.longText]),
+    // dateLabel counts too: a guessed date is exactly the kind of thing
+    // that must not reach the venue unnoticed
+    ...content.milestones.flatMap((m) => [
+      m.title,
+      m.text,
+      m.longText,
+      m.dateLabel,
+    ]),
     ...content.nearMisses.map((n) => n.label),
   ];
   return texts.some((t) => t?.includes('[PLACEHOLDER]'));

@@ -17,29 +17,43 @@ describe('shipped placeholder content', () => {
     expect(hasPlaceholderContent(content)).toBe(true);
   });
 
-  it('ships both births with a fuller telling', () => {
-    for (const id of ['her-01-foedsel', 'him-01-foedsel']) {
-      const m = content.milestones.find((x) => x.id === id)!;
-      expect(m.longText).toBeTruthy();
-    }
+  it('ships the real wedding date', () => {
+    expect(content.weddingDate).toBe('12. september 2026');
+    expect(content.weddingYear).toBe(2026);
+    const wedding = content.milestones.find((m) => m.id === content.weddingId)!;
+    expect(wedding.dateLabel).toContain('12. september 2026');
   });
 
-  it('ships equal her/him milestone counts (8 + 8)', () => {
+  it('ships balanced her/him milestone counts (13 + 13)', () => {
     const her = content.milestones.filter((m) => m.track === 'her');
     const him = content.milestones.filter((m) => m.track === 'him');
-    expect(her.length).toBe(8);
-    expect(him.length).toBe(8);
+    expect(her.length).toBe(13);
+    expect(him.length).toBe(13);
+  });
+
+  it("flags Marcus' thread as entirely unwritten", () => {
+    // every 'him' entry is still a placeholder awaiting his real story
+    const him = content.milestones.filter((m) => m.track === 'him');
+    expect(him.every((m) => m.title.includes('[PLACEHOLDER]'))).toBe(true);
+  });
+
+  it("has Ditte's real dates where the table supplied them", () => {
+    const byId = new Map(content.milestones.map((m) => [m.id, m]));
+    expect(byId.get('ditte-01-foedsel')!.dateLabel).toBe('14. marts 1994');
+    expect(byId.get('ditte-05-trongaardsskolen')!.dateLabel).toBe('2001');
+    expect(byId.get('ditte-11-student')!.dateLabel).toBe('2014');
+    expect(byId.get('blaue-blume')!.dateLabel).toBe('Onsdag den 1. marts 2023');
   });
 });
 
 describe('validateContent catches broken fixtures', () => {
   it('tolerates a small her/him imbalance but rejects a large one', () => {
     const one = clone();
-    one.milestones = one.milestones.filter((m) => m.id !== 'her-04-koret');
+    one.milestones = one.milestones.filter((m) => m.id !== 'ditte-04-kongens-lyngby');
     expect(() => validateContent(one)).not.toThrow(); // off by one: warns only
 
     const many = clone();
-    const drop = ['her-04-koret', 'her-05-studenterhue', 'her-06-jorden-rundt'];
+    const drop = ['ditte-04-kongens-lyngby', 'ditte-05-trongaardsskolen', 'ditte-06-bagsvaerd-kostskole'];
     many.milestones = many.milestones.filter((m) => !drop.includes(m.id));
     expect(() => validateContent(many)).toThrow(/for ulige/);
   });
@@ -58,13 +72,13 @@ describe('validateContent catches broken fixtures', () => {
 
   it('rejects shared milestones outside meeting→wedding', () => {
     const c = clone();
-    find(c, 'shared-02-faelles-adresse').year = 2019;
+    find(c, 'singapore').year = 2016; // before the meeting
     expect(() => validateContent(c)).toThrow(/mellem mødet/);
   });
 
   it('rejects her/him milestones after the meeting', () => {
     const c = clone();
-    find(c, 'her-08-egen-lejlighed').year = 2023;
+    find(c, 'ditte-13-paedagogik').year = 2023;
     expect(() => validateContent(c)).toThrow(/efter mødet/);
   });
 
@@ -73,19 +87,19 @@ describe('validateContent catches broken fixtures', () => {
 
   it('rejects duplicate ids', () => {
     const c = clone();
-    find(c, 'her-02-skolestart').id = 'her-01-foedsel';
+    find(c, 'ditte-02-vuggestue').id = 'ditte-01-foedsel';
     expect(() => validateContent(c)).toThrow(/unikke/);
   });
 
   it('rejects non-kebab-case ids', () => {
     const c = clone();
-    find(c, 'her-02-skolestart').id = 'Her_Skolestart';
+    find(c, 'ditte-02-vuggestue').id = 'Her_Skolestart';
     expect(() => validateContent(c)).toThrow(/kebab-case/);
   });
 
   it('rejects years that go backwards within a track', () => {
     const c = clone();
-    find(c, 'him-05-sejlerskolen').year = 2001;
+    find(c, 'marcus-05-skolestart').year = 1990; // before the entry above it
     expect(() => validateContent(c)).toThrow(/baglæns/);
   });
 
@@ -97,7 +111,7 @@ describe('validateContent catches broken fixtures', () => {
 
   it('rejects a child milestone outside the shared track', () => {
     const c = clone();
-    c.childId = 'her-08-egen-lejlighed';
+    c.childId = 'ditte-13-paedagogik';
     expect(() => validateContent(c)).toThrow(/'shared'/);
   });
 
