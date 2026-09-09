@@ -17,6 +17,16 @@
   transform: scale(var(--kiosk-scale));
 }
 
+/* a milestone whose card says everything: ornament, not a control */
+.marker.is-quiet {
+  cursor: default;
+  pointer-events: none;
+}
+
+.card.is-openable {
+  cursor: pointer;
+}
+
 .marker-emblem {
   width: 56px;
   height: 56px;
@@ -161,7 +171,6 @@
   position: absolute;
   padding: 14px 4px 6px;
   border-top: 1px solid var(--gilt);
-  cursor: pointer;
 }
 
 .card-left {

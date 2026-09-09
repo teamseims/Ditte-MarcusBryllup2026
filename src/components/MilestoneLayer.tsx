@@ -78,14 +78,14 @@ export function MilestoneLayer({
               }
             />
             {anchor.isWedding ? (
+              milestone.longText && (
               <div
                 className={`wedding-cue chip ${inked ? 'is-inked' : 'is-ghost'}`}
                 style={{ left: anchor.x, top: anchor.y + 252 }}
               >
-                {milestone.gallery.length > 0
-                  ? strings.seeImages
-                  : strings.readMore}
+                {strings.readMore}
               </div>
+              )
             ) : (
               <MilestoneCard
                 milestone={milestone}
@@ -184,19 +184,17 @@ function MilestoneCard({
     <div
       className={`card card-${side} card-${anchor.track} ${
         inked ? 'is-inked' : 'is-ghost'
-      }`}
+      }${milestone.longText ? ' is-openable' : ''}`}
       style={style}
-      onClick={() => onOpen(milestone.id)}
+      onClick={milestone.longText ? () => onOpen(milestone.id) : undefined}
     >
       <p className="chip card-date">{milestone.dateLabel}</p>
       <h3 className="card-title">{milestone.title}</h3>
       <p className="card-text">{milestone.text}</p>
-      {/* Only promise what's actually behind the tap: photos if there are
-          any, otherwise the longer story — and nothing at all when the card
-          already holds everything (the marker still opens its story card). */}
-      {milestone.gallery.length > 0 ? (
-        <p className="card-more chip">{strings.seeImages} →</p>
-      ) : milestone.longText ? (
+      {/* Only promise what is actually behind the tap. Without a fuller
+          telling the card already says everything, so no affordance and no
+          modal — a marker that opens a copy of the card is a dead end. */}
+      {milestone.longText ? (
         <p className="card-more chip">{strings.readMore} →</p>
       ) : null}
     </div>

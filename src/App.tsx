@@ -10,7 +10,7 @@ import { useScrollEngine } from './lib/scroll/useScrollEngine';
 import { Sprig } from './components/Sprig';
 import { Tapestry } from './components/Tapestry';
 import { MilestoneLayer } from './components/MilestoneLayer';
-import { GalleryModal } from './components/GalleryModal';
+import { StoryModal } from './components/StoryModal';
 import { StitchedNames } from './components/StitchedText';
 import { FinaleParticles } from './components/FinaleParticles';
 import { KioskController } from './kiosk/KioskController';
@@ -18,7 +18,7 @@ import { QrView } from './components/QrView';
 import './styles/qr.css';
 import './styles/threads.css';
 import './styles/milestones.css';
-import './styles/gallery.css';
+import './styles/story.css';
 import './styles/hero-finale.css';
 
 /**
@@ -55,7 +55,7 @@ function TapestryPage() {
   const progressRef = useRef<HTMLDivElement>(null);
   const [inkedIds, setInkedIds] = useState<ReadonlySet<string>>(new Set());
 
-  // ── gallery modal state + deep links (§8) ──
+  // ── story card state + deep links (§8) ──
   const [openId, setOpenId] = useState<string | null>(null);
   const markerRefs = useRef(new Map<string, HTMLButtonElement>());
   const registerMarker = useCallback(
@@ -66,12 +66,12 @@ function TapestryPage() {
     [],
   );
 
-  const openGallery = useCallback((id: string) => {
+  const openStory = useCallback((id: string) => {
     setOpenId(id);
     history.replaceState(null, '', `#${id}`);
   }, []);
 
-  const closeGallery = useCallback(() => {
+  const closeStory = useCallback(() => {
     setOpenId((id) => {
       if (id) {
         history.replaceState(null, '', window.location.pathname + window.location.search);
@@ -200,7 +200,7 @@ function TapestryPage() {
           content={content}
           inkedIds={inkedIds}
           pulseId={pulseId}
-          onOpen={openGallery}
+          onOpen={openStory}
           markerRef={registerMarker}
         />
       </main>
@@ -224,7 +224,7 @@ function TapestryPage() {
       <div className="vignette" aria-hidden="true" />
 
       {openMilestone && (
-        <GalleryModal milestone={openMilestone} onClose={closeGallery} />
+        <StoryModal milestone={openMilestone} onClose={closeStory} />
       )}
     </div>
   );

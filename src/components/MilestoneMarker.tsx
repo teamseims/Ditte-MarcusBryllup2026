@@ -7,7 +7,11 @@ import { Icon } from '../lib/icons/Icon';
 /**
  * Milestone markers (§7): embroidered emblems — a stitched ring in the
  * track color around the milestone's icon, sitting centered on the thread.
- * Real <button>s (aria-label = "dateLabel — title"), hit area ≥ 64px.
+ *
+ * A marker is a real <button> (aria-label = "dateLabel — title", hit area
+ * ≥ 64px) only when the milestone has a fuller telling to open. Without
+ * one the card beside it already says everything, so the marker renders as
+ * quiet ornament rather than a control that opens a copy of the card.
  *
  * Variants:
  *  - her / him: single-color dashed ring
@@ -48,25 +52,19 @@ export function MilestoneMarker({
   // seeded ring-dash rotation so the stitched rings don't all "start"
   // at the same angle (organic pass)
   const ringShift = hashString(milestone.id) % 8;
+  const openable = Boolean(milestone.longText);
 
-  return (
-    <button
-      ref={buttonRef}
-      type="button"
-      id={`marker-${milestone.id}`}
-      className={`marker marker-${variant} ${inked ? 'is-inked' : 'is-ghost'}${
-        pulsing ? ' is-pulsing' : ''
-      }`}
-      style={
-        {
-          left: anchor.x,
-          top: anchor.y,
-          '--ring-shift': `${ringShift}px`,
-        } as CSSProperties
-      }
-      aria-label={`${milestone.dateLabel} — ${milestone.title}`}
-      onClick={() => onOpen(milestone.id)}
-    >
+  const className = `marker marker-${variant} ${
+    inked ? 'is-inked' : 'is-ghost'
+  }${pulsing ? ' is-pulsing' : ''}${openable ? '' : ' is-quiet'}`;
+  const style = {
+    left: anchor.x,
+    top: anchor.y,
+    '--ring-shift': `${ringShift}px`,
+  } as CSSProperties;
+
+  const emblem = (
+    <>
       {variant === 'wedding' ? (
         <svg viewBox="0 0 96 96" className="marker-emblem" aria-hidden="true">
           <circle className="ring-gilt" cx="48" cy="48" r="43" />
@@ -112,6 +110,36 @@ export function MilestoneMarker({
           </g>
         </svg>
       )}
+    </>
+  );
+
+  // A button only when there is something to open; otherwise inert
+  // ornament that the screen reader skips — the card beside it already
+  // carries the same words in the document.
+  if (!openable) {
+    return (
+      <div
+        id={`marker-${milestone.id}`}
+        className={className}
+        style={style}
+        aria-hidden="true"
+      >
+        {emblem}
+      </div>
+    );
+  }
+
+  return (
+    <button
+      ref={buttonRef}
+      type="button"
+      id={`marker-${milestone.id}`}
+      className={className}
+      style={style}
+      aria-label={`${milestone.dateLabel} — ${milestone.title}`}
+      onClick={() => onOpen(milestone.id)}
+    >
+      {emblem}
     </button>
   );
 }

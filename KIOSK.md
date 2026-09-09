@@ -28,8 +28,8 @@ menu, no pinch zoom, and slightly larger type and touch targets.
 ## 3. Before guests arrive
 
 - **Load the page once on the venue Wi-Fi** and scroll it top to bottom.
-  This warms the cache for fonts and gallery images, so a flaky connection
-  during the party won't cause fallback fonts or empty galleries.
+  This warms the font cache, so a flaky connection during the party won't
+  leave the tapestry rendering in fallback fonts.
 - Sanity-check the attract loop without waiting 75 seconds:
   open `.../?mode=kiosk&attract=8` — it should start drifting after 8s and
   stop the instant you touch anything. Then switch back to the real URL.

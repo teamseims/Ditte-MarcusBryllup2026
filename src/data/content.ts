@@ -9,33 +9,34 @@
  *     While any marker remains, a small "PLACEHOLDER" ribbon shows on the
  *     hero so fake content can never sneak into the real event unnoticed.
  *
- *  2. Milestones: keep the number of 'her' and 'him' milestones EQUAL
- *     (the build refuses to run otherwise). Order within a track must be
- *     chronological (non-decreasing years). `year` drives vertical ordering
- *     on the tapestry; `dateLabel` is free display text ('Forår 1994' is
- *     fine — no parsing happens).
+ *  2. This is a TEXT tapestry — there are no photographs anywhere. Each
+ *     milestone is a marker on the thread with a small card beside it:
+ *     date, title, and one to three sentences. Give a milestone a
+ *     `longText` and its marker also opens a story card — the emblem
+ *     stitched large on linen with the fuller telling. Without `longText`
+ *     the card is the whole thing and the marker is quiet.
  *
- *  3. Photos: for each milestone, drop up to 10 images into
- *     `public/images/<milestone-id>/` and list them in `gallery` below.
- *     Export discipline (the code never resizes — it trusts you):
- *       • 1600px long edge
- *       • ~72% JPEG quality  (≈ 250–400 KB per image)
- *     Captions are optional; when present they double as alt text.
+ *  3. Adding milestones is the main job. One entry per moment:
  *
- *     NO PHOTOS FOR A MOMENT? Leave `gallery: []`. The milestone then
- *     opens a "story card" — its emblem stitched large on the linen with
- *     the date, title and story — instead of a gallery. This is the
- *     intended treatment for everything before phones had cameras, and it
- *     reads as deliberate. Two of the placeholder births below are set up
- *     that way so you can see it. Aim to keep the two threads similar in
- *     kind: if his early years are words, let hers be words too, and let
- *     the photographs begin on both threads where photographs began.
+ *       {
+ *         id: 'him-04-studenterhue',   // kebab-case, unique, stable
+ *         track: 'him',                // 'her' = Ditte, 'him' = Marcus,
+ *                                      // 'shared' = the two of them
+ *         year: 2010,                  // drives vertical order
+ *         dateLabel: 'Juni 2010',      // free text, shown on the card
+ *         title: 'Studenterhuen',
+ *         text: 'One to three sentences.',
+ *         longText: 'Optional — the fuller story, in the story card.',
+ *         icon: 'graduation-cap',
+ *       },
  *
- *     WARNING: never run `npm run placeholders` after adding real photos —
- *     it wipes and regenerates all of public/images/.
+ *     Order within a track must be chronological (non-decreasing years).
+ *     Keep the 'her' and 'him' counts close: a difference of one or two
+ *     only warns, but more than that stops the build, because one visibly
+ *     denser thread reads as though somebody was left out.
  *
  *  4. `id` must be kebab-case (a-z, 0-9, hyphens), unique, and STABLE:
- *     it names the image folder and the deep link (#milestone-id).
+ *     it is the deep link (#milestone-id) printed on anything you share.
  *
  *  5. The meeting milestone (track 'shared') is where the two threads touch
  *     for the first time; the wedding milestone is the final one (the knot).
@@ -59,30 +60,21 @@ export const SITE_URL = 'https://REPLACE-ME.vercel.app';
 
 export type Track = 'her' | 'him' | 'shared';
 
-export interface GalleryImage {
-  src: string; // e.g. '/images/her-01-foedsel/01.jpg'
-  caption?: string; // shown under the image; doubles as alt text
-}
-
 export interface Milestone {
-  id: string; // kebab-case, stable — image folder + deep link
+  id: string; // kebab-case, stable — the deep link (#milestone-id)
   track: Track;
   year: number; // drives vertical ordering
   dateLabel: string; // display string, free text
   title: string; // short, e.g. 'Ditte kommer til verden'
   text: string; // 1–3 sentences shown in the card
-  longText?: string; // optional extra paragraph inside the gallery modal
-  icon: IconName;
   /**
-   * 0–10 images.
-   *   1–10 → tapping the marker opens the photo gallery.
-   *   0    → tapping opens a "story card" instead: the milestone's emblem
-   *          stitched large on the linen with the date, title and story.
-   *          Use this for anything nobody photographed — most of childhood
-   *          for anyone born before phones had cameras. It is a deliberate
-   *          treatment, not a gap.
+   * Optional fuller telling. When present the marker becomes tappable and
+   * opens a story card — the emblem stitched large on linen above the
+   * date, title and this text. Without it the card says everything and
+   * the marker stays quiet rather than opening a dead end.
    */
-  gallery: GalleryImage[];
+  longText?: string;
+  icon: IconName;
 }
 
 export interface NearMiss {
@@ -110,13 +102,6 @@ export interface SiteContent {
   childId?: string;
 }
 
-/** Helper: placeholder gallery of n images for milestone `id`. */
-const gallery = (id: string, n: number): GalleryImage[] =>
-  Array.from({ length: n }, (_, i) => ({
-    src: `/images/${id}/${String(i + 1).padStart(2, '0')}.svg`,
-    caption: `[PLACEHOLDER] Billedtekst ${i + 1}`,
-  }));
-
 export const content: SiteContent = {
   her: { name: 'Ditte', birthYear: 1994 },
   him: { name: 'Marcus', birthYear: 1992 },
@@ -136,7 +121,6 @@ export const content: SiteContent = {
       longText:
         '[PLACEHOLDER] Her kan historien om hendes allerførste tid stå — stedet, årstiden, hvem der ventede. Denne milepæl har med vilje ingen billeder: den åbner som et fortællekort.',
       icon: 'flower',
-      gallery: [], // text-only story card — see the note at the top of the file
     },
     {
       id: 'her-02-skolestart',
@@ -146,7 +130,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Første skoledag',
       text: '[PLACEHOLDER] Med ny skoletaske og sommerfugle i maven — det første af mange kapitler.',
       icon: 'book',
-      gallery: gallery('her-02-skolestart', 6),
     },
     {
       id: 'her-03-hunden-bella',
@@ -156,7 +139,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Bella flytter ind',
       text: '[PLACEHOLDER] Fire poter, én våd snude og et venskab for livet.',
       icon: 'paw',
-      gallery: gallery('her-03-hunden-bella', 5),
     },
     {
       id: 'her-04-koret',
@@ -166,7 +148,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Stemmen finder koret',
       text: '[PLACEHOLDER] Onsdage bliver ugens bedste dag, og musikken flytter ind for altid.',
       icon: 'music-note',
-      gallery: gallery('her-04-koret', 6),
     },
     {
       id: 'her-05-studenterhue',
@@ -176,7 +157,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Studenterhuen',
       text: '[PLACEHOLDER] Hvid hue, hæse hurraråb og en sommer uden ende.',
       icon: 'graduation-cap',
-      gallery: gallery('her-05-studenterhue', 6),
     },
     {
       id: 'her-06-jorden-rundt',
@@ -188,7 +168,6 @@ export const content: SiteContent = {
       longText:
         '[PLACEHOLDER] Her er plads til en længere fortælling, som kun vises inde i billedgalleriet — et afsnit eller to om rejsen, menneskene og alt det, der ikke kunne være i det korte kort.',
       icon: 'plane',
-      gallery: gallery('her-06-jorden-rundt', 8),
     },
     {
       id: 'her-07-foerste-job',
@@ -198,7 +177,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Første rigtige job',
       text: '[PLACEHOLDER] Nye kollegaer, egen kaffekop og følelsen af at være landet.',
       icon: 'briefcase',
-      gallery: gallery('her-07-foerste-job', 5),
     },
     {
       id: 'her-08-egen-lejlighed',
@@ -208,7 +186,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Egne nøgler',
       text: '[PLACEHOLDER] To værelser, skæve gulve og en udsigt hun aldrig blev træt af.',
       icon: 'house',
-      gallery: gallery('her-08-egen-lejlighed', 6),
     },
 
     // ─────────────────────────── HANS TRÅD ───────────────────────────
@@ -222,7 +199,6 @@ export const content: SiteContent = {
       longText:
         '[PLACEHOLDER] Her kan historien om hans allerførste tid stå — stedet, årstiden, hvem der ventede. Denne milepæl har med vilje ingen billeder: den åbner som et fortællekort.',
       icon: 'star',
-      gallery: [], // text-only story card — see the note at the top of the file
     },
     {
       id: 'him-02-foerste-fodboldkamp',
@@ -232,7 +208,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Første fodboldkamp',
       text: '[PLACEHOLDER] For store benskinner, græsplet på knæet og et mål han stadig taler om.',
       icon: 'football',
-      gallery: gallery('him-02-foerste-fodboldkamp', 6),
     },
     {
       id: 'him-03-spejderlejr',
@@ -242,7 +217,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Sommerlejr i fjeldet',
       text: '[PLACEHOLDER] Første gang under åben himmel — og begyndelsen på kærligheden til bjergene.',
       icon: 'mountain',
-      gallery: gallery('him-03-spejderlejr', 6),
     },
     {
       id: 'him-04-studenterhue',
@@ -252,7 +226,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Studenterhuen',
       text: '[PLACEHOLDER] Hornmusik i carporten og en hue, der hurtigt fik mærker af det hele.',
       icon: 'graduation-cap',
-      gallery: gallery('him-04-studenterhue', 5),
     },
     {
       id: 'him-05-sejlerskolen',
@@ -262,7 +235,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Til søs',
       text: '[PLACEHOLDER] Salt i håret og ro i maven — sejlerskolen blev et andet hjem.',
       icon: 'anchor',
-      gallery: gallery('him-05-sejlerskolen', 6),
     },
     {
       id: 'him-06-udlandssemester',
@@ -274,7 +246,6 @@ export const content: SiteContent = {
       longText:
         '[PLACEHOLDER] Her er plads til en længere fortælling, som kun vises inde i billedgalleriet — mere om byen, vennerne og alt det, der ikke kunne være i det korte kort.',
       icon: 'sun',
-      gallery: gallery('him-06-udlandssemester', 7),
     },
     {
       id: 'him-07-foerste-job',
@@ -284,7 +255,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Første rigtige job',
       text: '[PLACEHOLDER] Skjorten var strøget, kaffen var dårlig, og alting var nyt.',
       icon: 'briefcase',
-      gallery: gallery('him-07-foerste-job', 5),
     },
     {
       id: 'him-08-marathon',
@@ -294,7 +264,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] De sidste 42 kilometer',
       text: '[PLACEHOLDER] Regn fra kilometer tre, krampe fra kilometer fyrre — og en medalje, der vejede det hele op.',
       icon: 'sparkle',
-      gallery: gallery('him-08-marathon', 6),
     },
 
     // ─────────────────────────── MØDET ───────────────────────────
@@ -308,7 +277,6 @@ export const content: SiteContent = {
       longText:
         '[PLACEHOLDER] Her kan historien om selve mødet foldes ud: hvem der sagde hvad, hvem der ikke turde, og hvordan det hele alligevel begyndte.',
       icon: 'sparkle',
-      gallery: gallery('moedet', 7),
     },
 
     // ─────────────────────────── FÆLLES TRÅD ───────────────────────────
@@ -320,7 +288,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Første rejse sammen',
       text: '[PLACEHOLDER] Ét kort over byen, to holdninger til at følge det.',
       icon: 'plane',
-      gallery: gallery('shared-01-foerste-rejse', 6),
     },
     {
       id: 'shared-02-faelles-adresse',
@@ -330,7 +297,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Fælles adresse',
       text: '[PLACEHOLDER] Flyttekasser, kompromisser om reoler og det første "hjemme hos os".',
       icon: 'house',
-      gallery: gallery('shared-02-faelles-adresse', 6),
     },
     {
       id: 'shared-03-hvalpen-viggo',
@@ -340,7 +306,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Viggo på fire poter',
       text: '[PLACEHOLDER] Han tyggede en sofa og stjal to hjerter.',
       icon: 'paw',
-      gallery: gallery('shared-03-hvalpen-viggo', 6),
     },
     {
       id: 'shared-04-frieriet',
@@ -352,7 +317,6 @@ export const content: SiteContent = {
       longText:
         '[PLACEHOLDER] Her er plads til hele frieriets historie — planen, nerverne og øjeblikket, som kun de to kender helt.',
       icon: 'heart',
-      gallery: gallery('shared-04-frieriet', 7),
     },
     {
       // The child (see childId below): from this milestone a third, smaller
@@ -366,7 +330,6 @@ export const content: SiteContent = {
       longText:
         '[PLACEHOLDER] Her er plads til historien om det lille menneske — navnet, natten, de første dage og alt det, der ikke kan siges kort.',
       icon: 'sprout',
-      gallery: gallery('shared-05-barnet', 6),
     },
     {
       id: 'shared-06-forberedelserne',
@@ -376,7 +339,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Alting bliver til »vi«',
       text: '[PLACEHOLDER] Prøvesmagninger, gæstelister og en fælles kalender, der aldrig har været så fuld — eller så glad.',
       icon: 'sun',
-      gallery: gallery('shared-06-forberedelserne', 6),
     },
 
     // ─────────────────────────── KNUDEN ───────────────────────────
@@ -388,7 +350,6 @@ export const content: SiteContent = {
       title: '[PLACEHOLDER] Brylluppet',
       text: '[PLACEHOLDER] I dag bindes knuden — foran alle jer, der er en del af vævningen.',
       icon: 'rings',
-      gallery: gallery('brylluppet', 8),
     },
   ],
 

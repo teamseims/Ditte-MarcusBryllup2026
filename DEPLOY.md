@@ -37,5 +37,5 @@ scans the printed sheet from ~1m before making copies.
 ## 5. Verify on the day's hardware
 
 - Kiosk: see `KIOSK.md`.
-- One iPhone + one Android on the venue Wi-Fi: scan, scroll, open a
-  gallery, swipe.
+- One iPhone + one Android on the venue Wi-Fi: scan, scroll to the
+  heart, open a story card.

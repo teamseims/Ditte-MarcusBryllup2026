@@ -1,7 +1,7 @@
 /**
  * Icon path data (§7) — hand-drawn stitched-style icons, 32×32 viewBox,
  * 2px strokes, no fills. Plain JS (not TS) on purpose: this file is imported
- * both by the React app and by scripts/generate-placeholders.mjs under Node.
+ * by the React app; kept as plain JS so plain-Node tooling can read it too.
  *
  * Each icon is an array of SVG path `d` strings. Adding a new icon:
  * add an entry here and add its name to IconName in iconPaths.d.ts.

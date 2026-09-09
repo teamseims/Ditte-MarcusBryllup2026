@@ -46,19 +46,31 @@ export function computeLayout(
     .slice(meetingIdx + 1)
     .filter((m) => m.id !== content.weddingId);
 
-  // Pre-meeting rows breathe unevenly (seeded −55…+65px per gap) — a life
-  // isn't laid out on ruled paper. Post-meeting spacing stays derived from
-  // the braid's phase plan; its irregularity comes from the braid itself.
+  // Spacing between the two separate lives adapts to how many moments
+  // there are: with a handful they get the full breathing room, and as the
+  // story fills in they close up toward a floor that still clears a card.
+  // Without this, a long timeline becomes a scroll nobody finishes (and a
+  // kiosk attract loop that takes minutes to reach the knot).
+  const spacing = Math.max(
+    cfg.preSpacingMin,
+    Math.min(cfg.preSpacing, cfg.preBudget / Math.max(1, preMeeting.length)),
+  );
+  // the seeded row jitter scales with the spacing it perturbs
+  const jitter = (spacing / cfg.preSpacing) * 60;
+
+  // Pre-meeting rows breathe unevenly — a life isn't laid out on ruled
+  // paper. Post-meeting spacing stays derived from the braid's phase plan;
+  // its irregularity comes from the braid itself.
   const rowRng = createRng(cfg.seed ^ 0x9a9);
   const placed: PlacedMilestone[] = [];
   let y = cfg.topPad;
   for (const m of preMeeting) {
     placed.push({ milestone: m, y });
-    y += cfg.preSpacing + rngRange(rowRng, -55, 65);
+    y += spacing + rngRange(rowRng, -jitter * 0.9, jitter);
   }
 
   // The meeting is a held moment: extra breathing room before it (§5.3).
-  y += cfg.preSpacing * (cfg.meetingBreath - 1);
+  y += spacing * (cfg.meetingBreath - 1);
   const yMeet = y;
   placed.push({ milestone: sorted[meetingIdx], y: yMeet });
 

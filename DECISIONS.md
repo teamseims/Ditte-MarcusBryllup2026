@@ -210,6 +210,58 @@ behind the medallion, inside the heart. Choices:
 - Omitting `childId` removes the thread, the emblem variant, and all of
   its DOM — validated (must be a shared milestone, not meeting/wedding).
 
+## No photographs at all (final direction)
+
+Days before the wedding the owner cut photography entirely: gathering and
+exporting images was too much work for the time left, and doing it well
+would have cost real storage. The site is now a **text tapestry** —
+threads, markers, cards, and a story card for anything with more to say.
+Removed: `public/images/`, the placeholder generator and its npm script,
+the `gallery` field and `GalleryImage` type, the photo viewer (swipe, tap
+zones, counter, preloading, lazy loading, skeleton) and its strings. The
+git history holds it all if photographs ever come back.
+
+Consequences worth knowing:
+
+- **The modal only opens for milestones with `longText`.** With no photos,
+  a modal that repeated the card beside it would be a dead end, so markers
+  without a fuller telling render as inert ornament (`aria-hidden`, no tab
+  stop) rather than a control that promises something. The card's
+  affordance line follows the same rule.
+- **The equal-count rule is now a balance rule.** The brief demanded
+  exactly equal `her`/`him` counts; the couple could not meet it, and a
+  hard throw on content nobody can change is a footgun days before an
+  event. A difference of one or two warns in the console; more than two
+  still stops the build, because one visibly denser thread reads as though
+  somebody was left out.
+
+## Scaling the timeline
+
+The milestone set is being filled in from a table and will be much larger
+than the placeholder 24. Two things were sized for a small set and would
+have broken:
+
+- **Vertical rhythm.** Pre-meeting spacing was a flat 620px per milestone,
+  so a long timeline became a scroll nobody finishes and a kiosk attract
+  loop (70px/s) that takes minutes to reach the heart. Spacing now adapts:
+  full breathing room while there are few, closing toward a 340px floor
+  (300px mobile) as the story fills in, budgeted so the two separate lives
+  aim to fit inside ~11,000px. The seeded row jitter scales with it. At
+  the current 16 pre-meeting milestones the output is unchanged.
+- **The braid's crossing bound.** Shared milestones sit two crossings
+  apart, so crossings ≈ 2 × shared + 1.5 — the old hard cap of 16 would
+  have failed at the eighth shared milestone. The real invariant is
+  *density* (180–260px apart, still asserted); a longer life together
+  earns a longer braid with proportionally more crossings, which is not
+  the "50+ reads as noise" failure the cap was written for. The bound is
+  now structural (≤ 2 × shared + 4).
+
+`src/test/scale.test.ts` builds synthetic timelines at 8/12/16/22
+milestones per track and asserts, at each size, that the braid still
+swaps sides at every crossing, the spacing stays in window, the two lives
+stay >80 units apart, anchors stay on their threads, milestones never
+collide, and the page stays under 26,000px on both desktop and mobile.
+
 ## Milestones without photos (the story card)
 
 Late change, days before the wedding: the couple could not source early

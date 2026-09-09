@@ -17,11 +17,9 @@ describe('shipped placeholder content', () => {
     expect(hasPlaceholderContent(content)).toBe(true);
   });
 
-  it('ships both births as text-only story cards', () => {
-    // the photo line: nothing before phones had cameras, on both threads
+  it('ships both births with a fuller telling', () => {
     for (const id of ['her-01-foedsel', 'him-01-foedsel']) {
       const m = content.milestones.find((x) => x.id === id)!;
-      expect(m.gallery).toHaveLength(0);
       expect(m.longText).toBeTruthy();
     }
   });
@@ -35,10 +33,15 @@ describe('shipped placeholder content', () => {
 });
 
 describe('validateContent catches broken fixtures', () => {
-  it('rejects unequal her/him counts', () => {
-    const c = clone();
-    c.milestones = c.milestones.filter((m) => m.id !== 'her-04-koret');
-    expect(() => validateContent(c)).toThrow(/LIGE mange/);
+  it('tolerates a small her/him imbalance but rejects a large one', () => {
+    const one = clone();
+    one.milestones = one.milestones.filter((m) => m.id !== 'her-04-koret');
+    expect(() => validateContent(one)).not.toThrow(); // off by one: warns only
+
+    const many = clone();
+    const drop = ['her-04-koret', 'her-05-studenterhue', 'her-06-jorden-rundt'];
+    many.milestones = many.milestones.filter((m) => !drop.includes(m.id));
+    expect(() => validateContent(many)).toThrow(/for ulige/);
   });
 
   it('rejects a missing meeting milestone', () => {
@@ -65,24 +68,8 @@ describe('validateContent catches broken fixtures', () => {
     expect(() => validateContent(c)).toThrow(/efter mødet/);
   });
 
-  it('accepts a gallery with no images (text-only story card)', () => {
-    const c = clone();
-    find(c, 'moedet').gallery = [];
-    expect(() => validateContent(c)).not.toThrow();
-  });
 
-  it('accepts a gallery with a single image', () => {
-    const c = clone();
-    find(c, 'moedet').gallery = find(c, 'moedet').gallery.slice(0, 1);
-    expect(() => validateContent(c)).not.toThrow();
-  });
 
-  it('rejects galleries with more than 10 images', () => {
-    const c = clone();
-    const g = find(c, 'moedet').gallery;
-    find(c, 'moedet').gallery = [...g, ...g];
-    expect(() => validateContent(c)).toThrow(/højst være 10/);
-  });
 
   it('rejects duplicate ids', () => {
     const c = clone();

@@ -6,15 +6,9 @@
 export interface UiStrings {
   scrollCue: string;
   close: string;
-  seeImages: string;
-  /** affordance on a milestone with no photos — opens the story card */
+  /** affordance on a milestone that has a fuller telling */
   readMore: string;
   storyLabel: (title: string) => string;
-  imageCounter: (n: number, total: number) => string;
-  imageAlt: (title: string, n: number) => string;
-  previousImage: string;
-  nextImage: string;
-  galleryLabel: (title: string) => string;
   closingLine: string;
   qrHeading: string;
   qrScanCue: string;
@@ -25,14 +19,8 @@ export interface UiStrings {
 const da: UiStrings = {
   scrollCue: 'Rul for at begynde',
   close: 'Luk',
-  seeImages: 'Se billeder',
   readMore: 'Læs mere',
   storyLabel: (title) => `Fortælling: ${title}`,
-  imageCounter: (n, total) => `${n} / ${total}`,
-  imageAlt: (title, n) => `${title} — billede ${n}`,
-  previousImage: 'Forrige billede',
-  nextImage: 'Næste billede',
-  galleryLabel: (title) => `Billeder: ${title}`,
   closingLine: '[PLACEHOLDER] …og her begynder resten.',
   qrHeading: 'Følg trådene',
   qrScanCue: 'Scan for at følge trådene',
@@ -44,14 +32,8 @@ const da: UiStrings = {
 const en: UiStrings = {
   scrollCue: 'Scroll to begin',
   close: 'Close',
-  seeImages: 'See photos',
   readMore: 'Read more',
   storyLabel: (title) => `Story: ${title}`,
-  imageCounter: (n, total) => `${n} / ${total}`,
-  imageAlt: (title, n) => `${title} — photo ${n}`,
-  previousImage: 'Previous photo',
-  nextImage: 'Next photo',
-  galleryLabel: (title) => `Photos: ${title}`,
   closingLine: '[PLACEHOLDER] …and here begins the rest.',
   qrHeading: 'Follow the threads',
   qrScanCue: 'Scan to follow the threads',

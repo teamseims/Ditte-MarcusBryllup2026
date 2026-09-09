@@ -30,7 +30,11 @@ export interface GeometryConfig {
 
   /* Vertical rhythm (§4) */
   topPad: number;
-  preSpacing: number; // px between consecutive pre-meeting milestones
+  preSpacing: number; // px between consecutive pre-meeting milestones (max)
+  /** floor for that spacing once there are many milestones */
+  preSpacingMin: number;
+  /** px of tapestry the two separate lives should aim to fit inside */
+  preBudget: number;
   meetingBreath: number; // multiplier on preSpacing for the gap before the meeting
   bottomPad: number;
 
@@ -58,6 +62,8 @@ export const DESKTOP_CONFIG: Omit<GeometryConfig, 'widthPx'> = {
   nearMissWindow: 260,
   topPad: 340,
   preSpacing: 620,
+  preSpacingMin: 340,
+  preBudget: 11000,
   meetingBreath: 1.5,
   bottomPad: 260,
   knotEntryRise: 240,
@@ -77,6 +83,8 @@ export const MOBILE_CONFIG: Omit<GeometryConfig, 'widthPx'> = {
   braidAmpEnd: 14,
   topPad: 300,
   preSpacing: 560,
+  preSpacingMin: 300,
+  preBudget: 9500,
   bottomPad: 220,
 };
 

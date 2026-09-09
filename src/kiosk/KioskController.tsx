@@ -32,7 +32,7 @@ export function KioskController({ reducedMotion }: { reducedMotion: boolean }) {
     const html = document.documentElement;
     html.classList.add('kiosk');
 
-    // pinch-zoom off; gallery swipe unaffected (§10)
+    // pinch-zoom off (§10)
     const viewport = document.querySelector<HTMLMetaElement>(
       'meta[name="viewport"]',
     );
